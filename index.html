@@ -6,22 +6,24 @@
         <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
-        <script src="jspsych/modified-image-plugin.js"></script>
-        <script src="all_sentences.js"></script>
-        <script src="association.js"></script>
-        <script src="priming.js"></script>
+        <script src="jspsych/modified-image-plugin copy.js"></script>
+        <script src="all_sentences copy.js"></script>
+        <script src="association copy.js"></script>
+        <script src="priming copy.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
         </script>
     </head>
     <body> </body>
     <script> 
-        const JsPsych= initJsPsych
+        const jspsych= initJsPsych
+        var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
+console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
             type: jsPsychInstructions,
             pages: [ 
      ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. In this study you will read sentences that contain novel words. After the reading session you will be asked to apply these words in a word task. This experiement consists of three blocks. In each block you will have a reading and a testing section. Let us begin.',
-     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, press space bar to move to the next sentence. However, to ensure that you are  ' ,
-     'page 3 instructions.'
+     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, press space bar to move to the next sentence. However, to ensure that you are reading carefully there will be surprise questions in the reading section. These questions will ask you to type one novel word from the sentence you just read. When you have typed in your answer press next to move to the next sentence.  ' ,
+     'It is time to read the sentences. Press SPACEBAR to move to the next sentence.'
      ],
         show_clickable_nav: true
         }
@@ -150,9 +152,6 @@ var priming_procedure = {
         randomize_order: true,
 };
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
-    jspsych.run([priming_procedure])
-        </script>
-</HTML>
-        jspsych.run([initial_instructions])
+    jspsych.run([initial_instructions, training_plus_association, priming_instructions, priming_procedure])
         </script>
 </HTML>
