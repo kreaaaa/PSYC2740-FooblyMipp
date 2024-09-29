@@ -15,7 +15,7 @@
     </head>
     <body> </body>
     <script> 
-        const jspsych= initJsPsych
+        const jspsych= initJsPsych ();
         var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
 console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
