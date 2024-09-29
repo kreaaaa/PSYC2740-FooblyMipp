@@ -1,4 +1,4 @@
-[
+var practice_stimuli_1 = [
   {
     "block_number": "practice",
     "triad": 1,

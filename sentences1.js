@@ -1,4 +1,4 @@
-[
+var list_of_sentences_1 = [
   {
     "Diad": 1,
     "Pair": "foobly clock",
