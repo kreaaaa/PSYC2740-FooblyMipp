@@ -15,8 +15,10 @@
     </head>
     <body> </body>
     <script> 
+
         const jspsych= initJsPsych ();
         var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
+
 console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
             type: jsPsychInstructions,
@@ -72,32 +74,38 @@ console.log ("random_attention_trials =" + random_attention_trials);
         timeline_variables: list_of_sentences_1,
         randomize_order: true,
     };
+
     var association = {
       type: jsPsychSurveyText,
   questions: [ {prompt: jspsych.timelineVariable('cue')}],
     };
+
     var association_procedure= {
         timeline: [association],
-        timeline_variables: association_cues,
+        timeline_variables: association_cues_1,
         randomize_order: true,
         repetitions: 3 
     };
+
     var training_plus_association ={
         timeline: [training_procedure,association_instructions, association_procedure],
         repetitions: 3
-    }
+    };
+
     var slow_experiment_trial = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: "<br> Too Slow brotha</b>! <br><br> Do better.",
         choices: "NO_KEYS",
         trial_duration: 1500
-    }
+    };
+
     var fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: ['NO_KEYS'],
     trial_duration: 500, 
     };
+    
     var image = {
     type: jsPsychImageKeyboardResponse,
     stimulus: jspsych.timelineVariable('image_path'),
@@ -107,6 +115,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
     maintain_aspect_ratio: true,
     prompt:"<span style = 'font-size:300%'><br><br></span>"
 };
+
 var prime = {
     type: jsPsychImageKeyboardResponse,
     //  trial_duration: 300,
@@ -131,6 +140,7 @@ var target = {
         return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('target_word')) + "<br></span>";
 },
 }
+
 var priming_feedback= {
         timeline: [slow_experiment_trial],
         conditional_function: function(){
@@ -146,6 +156,7 @@ var priming_feedback= {
             }
         }
 }
+
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
         timeline_variables: practice_stimuli_1,
