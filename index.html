@@ -156,17 +156,17 @@ var priming_feedback= {
         }
 }
 var practice_stimuli = [
-  { image_path: 'cash-rock.png', prime_word: 'prime_word', target_word: 'target_word' },
-  { image_path: 'clock_trash.png', prime_word: 'prime_word', target_word: 'target_word' },
-  { image_path: 'rock-cash.png', prime_word: 'prime_word', target_word: 'target_word' },
-  { image_path: 'trash_clock.png', prime_word: 'prime_word', target_word: 'target_word' },
-
+  { image_path: 'cash-rock.png'},
+  { image_path: 'clock_trash.png'},
+  { image_path: 'rock-cash.png'},
+  { image_path: 'trash_clock.png'},
 ]
 
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
         timeline_variables: practice_stimuli,
         randomize_order: true,
+        repetitions: 3
 };
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
     jspsych.run([ priming_procedure])
