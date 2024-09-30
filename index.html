@@ -39,7 +39,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var priming_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'Get ready for the priming task.'
+        'Get ready for the word association task.'
         ],
         show_clickable_nav: true 
         }
@@ -58,7 +58,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
 
     var attention = {
       type: jsPsychSurveyText,
-  questions: [ {prompt: "Type Any one novel word from the previous sentence:"}],
+  questions: [ {prompt: "Type one novel word from the previous sentence:"}],
     };
     var attention_conditional= {
         timeline: [attention],
@@ -155,20 +155,13 @@ var priming_feedback= {
             }
         }
 }
-var practice_stimuli = [
-  { image_path: 'cash-rock.png'},
-  { image_path: 'clock_trash.png'},
-  { image_path: 'rock-cash.png'},
-  { image_path: 'trash_clock.png'},
-]
-
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
-        timeline_variables: practice_stimuli,
+        timeline_variables: practice_stimuli_1,
         randomize_order: true,
-        repetitions: 3
+        repetitions: 10
 };
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
-    jspsych.run([ priming_procedure])
+    jspsych.run([ initial_instructions, training_plus_association, priming_instructions,priming_procedure])
         </script>
 </HTML>

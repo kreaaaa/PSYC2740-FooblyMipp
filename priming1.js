@@ -9,7 +9,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -22,7 +22,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -35,7 +35,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -48,7 +48,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -61,7 +61,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -74,7 +74,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -87,7 +87,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -100,7 +100,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -113,7 +113,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -126,7 +126,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -139,7 +139,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -152,7 +152,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -165,7 +165,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -178,7 +178,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -191,7 +191,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -204,7 +204,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -217,7 +217,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -230,7 +230,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -243,7 +243,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -256,7 +256,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -269,7 +269,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -282,7 +282,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -295,7 +295,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -308,7 +308,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -321,7 +321,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -334,7 +334,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -347,7 +347,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -360,7 +360,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -373,7 +373,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -386,7 +386,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -399,7 +399,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -412,7 +412,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -425,7 +425,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -438,7 +438,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -451,7 +451,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -464,7 +464,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -477,7 +477,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -490,7 +490,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "A"
   },
   {
@@ -503,7 +503,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -516,7 +516,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -529,7 +529,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -542,7 +542,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -555,7 +555,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -568,7 +568,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "rockcash.png",
+    "image_path": "rock-cash.png",
     "correct_key": "L"
   },
   {
@@ -581,7 +581,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -594,7 +594,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -607,7 +607,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -620,7 +620,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -633,7 +633,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -646,7 +646,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 3,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "L"
   },
   {
@@ -659,7 +659,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -672,7 +672,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "unrelated",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -685,7 +685,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -698,7 +698,7 @@ var practice_stimuli_1 = [
     "type": "direct",
     "relatedness": "related",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -711,7 +711,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   },
   {
@@ -724,7 +724,7 @@ var practice_stimuli_1 = [
     "type": "novel",
     "relatedness": "novel",
     "correct_response": 1,
-    "image_path": "cashrock.png",
+    "image_path": "cash-rock.png",
     "correct_key": "A"
   }
 ]
