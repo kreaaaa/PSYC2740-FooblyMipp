@@ -23,8 +23,8 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-     ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. In this study you will read sentences that contain novel words. After the reading session you will be asked to apply these words in a word task. This experiement consists of three blocks. In each block you will have a reading and a testing section. Let us begin.',
-     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, press space bar to move to the next sentence. However, to ensure that you are reading carefully there will be surprise questions in the reading section. These questions will ask you to type one novel word from the sentence you just read. When you have typed in your answer press next to move to the next sentence.  ' ,
+     ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words <br> lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. <br> In this study you will read sentences that contain novel words. After the reading session, you will be prompted with a novel word <br> and asked to respond them with the first word you think of. This experiement consists of three blocks. <br> In each block you will have a reading and a testing section. Let us begin.',
+     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, <br> press space bar to move to the next sentence. However, to ensure that you are reading carefully, <br> there will be surprise questions in the reading section. These questions will ask you to type ANY ONE novel word <br> from the sentence you just read. When you have typed in your answer, press next to move to the next sentence.  ' ,
      'It is time to read the sentences. Press SPACEBAR to move to the next sentence.'
      ],
         show_clickable_nav: true
@@ -32,7 +32,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var association_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'Done with sentences. Association time.'
+        'Done with sentences. Association time. Please respond with the first word you think of.'
         ],
         show_clickable_nav: true
         }
@@ -87,7 +87,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
     };
 
     var training_plus_association ={
-        timeline: [training_procedure,association_instructions, association_procedure],
+        timeline: [training_procedure, association_instructions, association_procedure],
         repetitions: 3
     };
 
