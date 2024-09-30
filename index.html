@@ -32,7 +32,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var association_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'Done with sentences. Association time. Please respond with the first word you think of.'
+        'You have completed the learning section. Association time. <br> Please respond with the first word you think of when presented with the stimulus.'
         ],
         show_clickable_nav: true
         }
@@ -49,6 +49,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
       type: jsPsychHtmlKeyboardResponse,
       stimulus: jspsych.timelineVariable('sentence'),
       choices: [' '],
+      trial_duration: 10,
       on_finish: function (data) {
         sentence_number = (sentence_number +1) % 40
         //console.log ("sentence_number=" + sentence_number);
