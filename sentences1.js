@@ -3,7 +3,7 @@ var list_of_sentences_1 = [
     "Diad": 1,
     "Pair": "foobly clock",
     "Part": "training",
-    "sentence": "I went to Zimziland because I heard you can get a foobly clock  there.",
+    "sentence": "I went to Zimziland because I heard you can get a foobly clock there.",
     "novel1": "foobly",
     "novel2": "Zimziland"
   },
@@ -203,7 +203,7 @@ var list_of_sentences_1 = [
     "Diad": 2,
     "Pair": "dodsy trash",
     "Part": "training",
-    "sentence": "I hadn't seen  dodsy trash for hours.",
+    "sentence": "I hadn't seen dodsy trash for hours.",
     "novel1": "dodsy",
     "novel2": ""
   },
@@ -243,7 +243,7 @@ var list_of_sentences_1 = [
     "Diad": 2,
     "Pair": "geck wreck",
     "Part": "training",
-    "sentence": "I would like to have a  geck wreck.",
+    "sentence": "I would like to have a geck wreck.",
     "novel1": "geck",
     "novel2": ""
   },
