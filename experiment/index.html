@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title> Foobly Mipp Experiment  </title>
+           <script src="https://unpkg.com/jspsych@7.3.3"></script>
+        <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+        <script src="jspsych/modified-image-plugin copy.js"></script>
+        <script src="sentences1.js"></script>
+        <script src="association1.js"></script>
+        <script src="priming1.js"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
+        </script>
+    </head>
+    <body> </body>
+    <script> 
+
+        const jspsych= initJsPsych ();
+        var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
+
+console.log ("random_attention_trials =" + random_attention_trials);
+        var initial_instructions= {
+            type: jsPsychInstructions,
+            pages: [ 
+     ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words <br> lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. <br> In this study you will read sentences that contain novel words. After the reading session, you will be prompted with a novel word <br> and asked to respond them with the first word you think of. This experiement consists of three blocks. <br> In each block you will have a reading and a testing section. Let us begin.',
+     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, <br> press space bar to move to the next sentence. However, to ensure that you are reading carefully, <br> there will be surprise questions in the reading section. These questions will ask you to type ANY ONE novel word <br> from the sentence you just read. When you have typed in your answer, press next to move to the next sentence.  ' ,
+     'It is time to read the sentences. Press SPACEBAR to move to the next sentence.'
+     ],
+        show_clickable_nav: true
+        }
+        var association_instructions= {
+            type: jsPsychInstructions,
+            pages: [ 
+        'Done with sentences. Association time. Please respond with the first word you think of.'
+        ],
+        show_clickable_nav: true
+        }
+        var priming_instructions= {
+            type: jsPsychInstructions,
+            pages: [ 
+        'Get ready for the word association task.'
+        ],
+        show_clickable_nav: true 
+        }
+
+        var sentence_number= 0; 
+        var sentence = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: jspsych.timelineVariable('sentence'),
+      choices: [' '],
+      on_finish: function (data) {
+        sentence_number = (sentence_number +1) % 40
+        //console.log ("sentence_number=" + sentence_number);
+      }
+    };
+    
+
+    var attention = {
+      type: jsPsychSurveyText,
+  questions: [ {prompt: "Type one novel word from the previous sentence:"}],
+    };
+    var attention_conditional= {
+        timeline: [attention],
+        conditional_function: function(){
+            if (random_attention_trials.includes(sentence_number)) {return true;}
+            else {return false;}
+        }
+    }
+
+    var training_procedure= {
+        timeline:[sentence, attention_conditional],
+        timeline_variables: list_of_sentences_1,
+        randomize_order: true,
+    };
+
+    var association = {
+      type: jsPsychSurveyText,
+  questions: [ {prompt: jspsych.timelineVariable('cue')}],
+    };
+
+    var association_procedure= {
+        timeline: [association],
+        timeline_variables: association_cues_1,
+        randomize_order: true,
+        repetitions: 3 
+    };
+
+    var training_plus_association ={
+        timeline: [training_procedure, association_instructions, association_procedure],
+        repetitions: 3
+    };
+
+    var slow_experiment_trial = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "<br> Too Slow!</b>! <br><br> Do better.",
+        choices: "NO_KEYS",
+        trial_duration: 1500
+    };
+
+    var fixation = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '+',
+    choices: ['NO_KEYS'],
+    trial_duration: 500, 
+    };
+    
+    var image = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: jspsych.timelineVariable('image_path'),
+    choices: ['NO_KEYS'],
+    trial_duration: 500,
+    stimulus_width: 500,
+    maintain_aspect_ratio: true,
+    prompt:"<span style = 'font-size:300%'><br><br></span>"
+};
+
+var prime = {
+    type: jsPsychImageKeyboardResponse,
+    //  trial_duration: 300,
+    stimulus: jspsych.timelineVariable('image_path'),
+    choices: "NO_KEYS",
+    trial_duration: 500,
+    stimulus_width: 500,
+    maintain_aspect_ratio: true,
+    prompt: function () {
+    return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('prime_word')) + "<br></span>";
+},
+}
+
+var target = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: jspsych.timelineVariable('image_path'),
+    // trial_duration: 300,
+    choices: ['Q', 'P'],
+    stimulus_width: 500,
+    maintain_aspect_ratio: true,
+    prompt:function () {
+        return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('target_word')) + "<br></span>";
+},
+}
+
+var priming_feedback= {
+        timeline: [slow_experiment_trial],
+        conditional_function: function(){
+            // get the data from the previous trial
+            // and check if rt is greater than 800 ms 
+            var rt = jspsych.data.get().last(1).values ()[0].rt 
+                if (rt > 800) {
+                return true;
+            }
+            else {
+                return false;
+
+            }
+        }
+}
+var priming_procedure = {
+  timeline:[fixation,image,prime,target,priming_feedback],
+        timeline_variables: practice_stimuli_1,
+        randomize_order: true,
+        repetitions: 10
+};
+    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
+    jspsych.run([ initial_instructions, training_plus_association, priming_instructions,priming_procedure])
+        </script>
+</HTML>
