@@ -1,1 +1,0 @@
-# PSYC2740-FooblyMipp
