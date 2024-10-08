@@ -23,32 +23,24 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-     'The mechanisms by which we learn new words are important to psychological research. Therefore, the question of how we learn and integrate new words <br> lingers in the scientific community. It is often believed that we learn through conversation or even by observing such as on the television or in shows. <br> In this study you will read sentences that contain novel words. After the reading session, you will be prompted with a novel word <br> and asked to respond to it with the first word you think of. This experiement consists of three blocks. <br> In each block you will have a reading and a testing section. Let us begin.',
-     'Each sentence will be presented to you individually. When you have read through it thoroughly, <br> press space bar to move to the next sentence. However, to ensure that you are reading carefully, <br> there will be surprise questions in the reading section. These questions will ask you to type ANY ONE novel word <br> from the sentence you just read. When you have typed in your answer, press next to move to the next sentence.  ' ,
-     'It is time to read the sentences. Press SPACEBAR to begin the learning phase.'
+     ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words <br> lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. <br> In this study you will read sentences that contain novel words. After the reading session, you will be prompted with a novel word <br> and asked to respond them with the first word you think of. This experiement consists of three blocks. <br> In each block you will have a reading and a testing section. Let us begin.',
+     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, <br> press space bar to move to the next sentence. However, to ensure that you are reading carefully, <br> there will be surprise questions in the reading section. These questions will ask you to type ANY ONE novel word <br> from the sentence you just read. When you have typed in your answer, press next to move to the next sentence.  ' ,
+     'It is time to read the sentences. Press SPACEBAR to move to the next sentence.'
      ],
         show_clickable_nav: true
-        };
-     var final_instructions= {
-            type: jsPsychInstructions,
-            pages: [
-                'Thank you for completing our experiment. Take care.'
-     ]
-     }
-
-
+        }
         var association_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'You have completed the learning section. In this next section <br> Please respond with the first word that comes to mind when presented with the stimulus.'
+        'Done with sentences. Association time. Please respond with the first word you think of.'
         ],
         show_clickable_nav: true
         }
         var priming_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'This is the last part of the experiment. <br> You will be presented with slides showing a stack of cash and a rock. <br> Your job is to respond, as quickly as possible,to the side of the screen on which either the cash or rock is shown. <br> On this same slide with the pictures, two words will be presented. <br> You must read the first word but respond only to the second word. <br> For example if you see the words zash and rock, respond to where the rock is. <b>',
-        'You will press Q if the picture you want to choose is on the left <br> and P if the picture you want to choose in on the right. <br> Good luck!'],
+        'Get ready for the word association task.'
+        ],
         show_clickable_nav: true 
         }
 
@@ -57,7 +49,6 @@ console.log ("random_attention_trials =" + random_attention_trials);
       type: jsPsychHtmlKeyboardResponse,
       stimulus: jspsych.timelineVariable('sentence'),
       choices: [' '],
-      trial_duration: 10,
       on_finish: function (data) {
         sentence_number = (sentence_number +1) % 40
         //console.log ("sentence_number=" + sentence_number);
@@ -168,52 +159,7 @@ var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
         timeline_variables: practice_stimuli_1,
         randomize_order: true,
-        repetitions: 1
-};
-var demographics = {
-      type: jsPsychSurveyText,
-  questions: [ {prompt: "1.How old are you?"},
-  {prompt:"2.What is your gender?"},
-  {prompt: "3.How many years of formal education have you had?"},
-  {prompt:"4.Are you of Hispanic, Latino/a/x or of Spanish origin?"},
-]
-};
-var participant_race= {
-    type: jsPsychSurveyMultiSelect,
-  questions: [
-    {
-      prompt: "5.Please specify all the racial categories that apply to you:", 
-      options: ["American Indian/Alaskan Native","Asian","Black/African American", "Native Hawaiian or Other Pacific Islander","White/Caucasian", "More than one race", "other"], 
-      horizontal: true,
-      required: true,
-      name: 'race',
-      on_finish: function(data) {
-        data.response= data.response.race
-    }
-    }, 
-    {
-    prompt: "6.Please indicate what time of the day you feel most alert:",
-    options:["Morning", "Afternoon", "Evening"," No differences"],
-      horizontal: true,
-      required: true,
-      name: 'time of day most alert'},
-{
-      prompt: "7. What is your dominant hand?", 
-      options: ["Right","Left","Ambidextrous"],
-      horizontal: true,
-      required: true,
-      name: 'dominant hand'
-}
-]
-};
-  var demographics1 = {
-    type: jsPsychSurveyText,
- questions: [ {prompt:" 8.Is English your first language? (Yes/No)"},
-  {prompt: "8a.If responded NO to question 8: What is your first language?"},
-  {prompt: "8b.If responded NO to question 8: At what age did you learn English?"},
-  {prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)"},
-  ],
-  data:{ typeoftrial: 'participant demographics'}
+        repetitions: 10
 };
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure, final_instructions]);
     jspsych.run([initial_instructions, training_plus_association, priming_instructions,priming_procedure, final_instructions])
