@@ -5,10 +5,4 @@ var association_cues_1 = [
     {
         cue: "foobly"
     },
-    {
-        cue: "geck"
-    },
-    {
-        cue: "blarm"
-    },
 ]
