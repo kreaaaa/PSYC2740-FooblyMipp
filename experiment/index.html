@@ -19,17 +19,34 @@
         const jspsych= initJsPsych ();
         var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
 
+var id = Math.floor(Math.random() * 1000000000);
+console.log("id=", id)
+
+//tag all trials with ID
+
+jsPsych.data.addProperties({
+    ID: id
+});
+
+var preload = {
+    type:jsPsychPreload,
+    auto_preload: true,
+    images: ['horseapple.png', 'applehorse.png']
+}
+
 console.log ("random_attention_trials =" + random_attention_trials);
-        var initial_instructions= {
-            type: jsPsychInstructions,
-            pages: [ 
-     ' The process by which we learn new words is important to psychological research. However, the question of how we learn new words <br> lingers in the scientific community. Often we can learn in conversation or even by observing on television or in movies. <br> In this study you will read sentences that contain novel words. After the reading session, you will be prompted with a novel word <br> and asked to respond them with the first word you think of. This experiement consists of three blocks. <br> In each block you will have a reading and a testing section. Let us begin.',
-     'Each sentence will be presented to you one at a time. When you have read through it thoroughly, <br> press space bar to move to the next sentence. However, to ensure that you are reading carefully, <br> there will be surprise questions in the reading section. These questions will ask you to type ANY ONE novel word <br> from the sentence you just read. When you have typed in your answer, press next to move to the next sentence.  ' ,
-     'It is time to read the sentences. Press SPACEBAR to move to the next sentence.'
-     ],
-        show_clickable_nav: true
-        }
-        var association_instructions= {
+      
+var initial_instructions = {
+    type: jsPsychInstructions,
+    pages: [
+    'How do we learn new words? <br><br> Most of the words we know we learned spontaneously, like when hearing a novel word while listening to <br> someone speaking, watching TV or while reading. In this study, your task will be to simply read sentences <br> containing new words. After the reading session, we will ask you to use these novel words in a word game. <br> This experiment has three blocks. Each block has reading and testing session.<br> Are you ready to start?',
+    'We will present one sentence at a time. <br>Read them carefully. When you are ready, press space bar for the next sentence. <br>In order to make sure you are reading carefully, there will be surprise questions during the reading session. <br><br>You will be asked to type in the novel words from the last sentence you read. <br>Minor spelling mistakes will be tolerated. <br>Type in your answer and press enter when you are ready to move on to the next sentence.',
+    'You will now read the sentences. <br> Press SPACEBAR when you have read the sentence and want to move on to the next.'
+    ],
+show_clickable_nav: true
+}
+    
+var association_instructions= {
             type: jsPsychInstructions,
             pages: [ 
         'Done with sentences. Association time. Please respond with the first word you think of.'
@@ -39,28 +56,64 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var priming_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'Get ready for the word association task.'
+        'This is our final game.<br>You will be presented with slides showing an apple and a horse.<br>Your task will be to respond as quickly as possible, on which side of the screen the apple or the horse is shown.<br>On the same screen, with pictures, two words will be presented. Read the first word,<br>but respond in accordance with the second word. For example, if you see words “boff” and “apple”,<br>respond where the apple is. If you see words “boff” and “horse”, respond where the horse is.',
+        'You will press A if you want to choose the picture on the left and <br> L if you want to choose the picture on the right'
         ],
         show_clickable_nav: true 
-        }
+    }
 
-        var sentence_number= 0; 
-        var sentence = {
+    var sentence_number= 0; 
+    
+    var sentence = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: jspsych.timelineVariable('sentence'),
       choices: [' '],
-      on_finish: function (data) {
-        sentence_number = (sentence_number +1) % 40
-        //console.log ("sentence_number=" + sentence_number);
-      }
-    };
-    
+      on_finish: function(data) {
+        last_trial_index = (data.trial_index + 1 ) % 40 ;
+        console.log ("last_trial_index = " + last_trial_index);
+        sentence_number = (sentence_number + 1 ) % 40;
+       console.log ("sentence_number = " + sentence_number);
+    },
+data: {
+        typeoftrial: 'sentence',
+        sentence: jsPsych.timelineVariable('sentence'),
+        novel1: jsPsych.timelineVariable('novel1'),
+        novel2: jsPsych.timelineVariable('novel2'),
+        novel3: jsPsych.timelineVariable('novel3')
+    }
+}
 
     var attention = {
-      type: jsPsychSurveyText,
-  questions: [ {prompt: "Type one novel word from the previous sentence:"}],
-    };
-    var attention_conditional= {
+    type: jsPsychSurveyText,
+    questions: [{prompt: "Type any ONE novel word from the previous sentence:"}],
+//two forward slashes to take notes
+    data: {
+        typeoftrial: 'attention',
+    },
+
+    on_finish: function (data){
+        var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'sentence'}). last(1).values()[0];
+    console.log("last_trial_data= ", last_trial_data);
+
+    data.novel1= last_trial_data.novel1;
+    data.novel2= last_trial_data.novel2;
+    data.novel3= last_trial_data.novel3;
+    data.response = data.response.Q0;
+
+    if(
+        jsPsych.pluginAPI.compareKeys(data.response, data.novel1) ||
+        jsPsych.pluginAPI.compareKeys(data.response, data.novel2) ||
+        jsPsych.pluginAPI.compareKeys(data.response, data.novel3) 
+    ){
+        data.correct = 1;
+        console.log("correct=" + data.correct);
+    } else {
+        data.correct = 0;
+        console.log("correct=" + data.correct);}
+}
+}
+
+var attention_conditional= {
         timeline: [attention],
         conditional_function: function(){
             if (random_attention_trials.includes(sentence_number)) {return true;}
@@ -68,51 +121,66 @@ console.log ("random_attention_trials =" + random_attention_trials);
         }
     }
 
-    var training_procedure= {
+var training_procedure= {
         timeline:[sentence, attention_conditional],
         timeline_variables: list_of_sentences_1,
         randomize_order: true,
     };
 
-    var association = {
-      type: jsPsychSurveyText,
-  questions: [ {prompt: jspsych.timelineVariable('cue')}],
-    };
+var association = {
+    type: jsPsychSurveyText,
+    preamble: 'Type in the first word that comes to mind when you see the word below:',
+    questions: [{prompt: jsPsych.timelineVariable('cue')}],
+    trial_duration: 10,
+    data: {
+        typeoftrial: 'association',
+        cue: jsPsych.timelineVariable('cue')
+    },
+    on_finish: function(data){
+        data.response = data.response.Q0
+    }
+}
 
-    var association_procedure= {
+var association_procedure= {
         timeline: [association],
         timeline_variables: association_cues_1,
         randomize_order: true,
         repetitions: 3 
     };
 
-    var training_plus_association ={
+var training_plus_association ={
         timeline: [training_procedure, association_instructions, association_procedure],
         repetitions: 3
     };
 
-    var slow_experiment_trial = {
+var slow_experiment_trial = {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: "<br> Too Slow!</b>! <br><br> Do better.",
+        stimulus: "<br> Too Slow!</b>! <br> Please try to respond faster.",
         choices: "NO_KEYS",
         trial_duration: 1500
     };
 
-    var fixation = {
+var fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: ['NO_KEYS'],
     trial_duration: 500, 
+    data: {
+    typeoftrial: 'fixation'
+        }
     };
     
-    var image = {
+var image = {
     type: jsPsychImageKeyboardResponse,
     stimulus: jspsych.timelineVariable('image_path'),
     choices: ['NO_KEYS'],
     trial_duration: 500,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
-    prompt:"<span style = 'font-size:300%'><br><br></span>"
+    prompt:"<span style = 'font-size:200%'><br><br></span>",
+    data: {
+        typeoftrial: 'image',
+      },
 };
 
 var prime = {
@@ -125,19 +193,32 @@ var prime = {
     maintain_aspect_ratio: true,
     prompt: function () {
     return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('prime_word')) + "<br></span>";
-},
+    },
 }
 
 var target = {
     type: jsPsychImageKeyboardResponse,
     stimulus: jspsych.timelineVariable('image_path'),
     // trial_duration: 300,
-    choices: ['Q', 'P'],
+    choices: ['A', 'L'],
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt:function () {
         return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('target_word')) + "<br></span>";
-},
+    },
+    data: {
+        typeoftrial: 'target',
+        target: jsPsych.timelineVariable('target_word'), 
+        prime: jsPsych.timelineVariable('prime_word'),
+        type: jsPsych.timelineVariable ('type'),
+        relatedness: jsPsych.timelineVariable('relatedness'),
+        correct_key: jsPsych.timelineVariable('correct_key'),
+        block_number: jsPsych.timelineVariable('block_number')
+    },
+
+    on_finish: function(data){
+    data.correct= jsPsych.pluginAPI.compareKeys(data.response, data.correct_key);
+    }
 }
 
 var priming_feedback= {
@@ -151,66 +232,133 @@ var priming_feedback= {
             }
             else {
                 return false;
-
             }
+        data: {
+        typeoftrial: 'fixation'
         }
+    }
 }
+
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
-        timeline_variables: practice_stimuli_1,
+        timeline_variables: test_stimuli_1,
         randomize_order: true,
-        repetitions: 10
+        repetitions: 2
 };
+
+var training_procedure ={
+    timeline: [sentence, attention_conditional],
+    timeline_variables: sentences,
+    randomize_order: true
+}
+
+var ending_instructions = {
+type: jsPsychInstructions,
+pages: [
+'You will now be asked several demographic questions.<br>Please press on individual text boxes to enter as ENTER will move you on to the next page.'
+],
+show_clickable_nav: true
+}
+
 var demographics = {
-      type: jsPsychSurveyText,
-            questions: [ {prompt: "1.How old are you?"},
-            {prompt:"2.What is your gender?"},
-            {prompt: "3.How many years of formal education have you had?"},
-             {prompt:"4.Are you of Hispanic, Latino/a/x or of Spanish origin?"},
-]
-};
-var participant_race= {
-        type: jsPsychSurveyMultiSelect,
-        questions: [
-         {
-        prompt: "5.Please specify all the racial categories that apply to you:", 
-        options: ["American Indian/Alaskan Native","Asian","Black/African American", "Native Hawaiian or Other Pacific Islander","White/Caucasian", "More than one race", "other"], 
-        horizontal: true,
-        required: true,
-        name: 'race',
-            on_finish: function(data) {
-                data.response= data.response.race
-            }
-        }, 
-        {
-        prompt: "6.Please indicate what time of the day you feel most alert:",
-        options:["Morning", "Afternoon", "Evening"," No differences"],
-        horizontal: true,
-        required: true,
-        name: 'time of day most alert'},
-        {
-        prompt: "7. What is your dominant hand?", 
-        options: ["Right","Left","Ambidextrous"],
-        horizontal: true,
-        required: true,
-        name: 'dominant hand'
-        }
-        ]
-};
-
-  var demographics1 = {
     type: jsPsychSurveyText,
-        questions: [ {prompt:" 8.Is English your first language? (Yes/No)"},
-        {prompt: "8a.If responded NO to question 8: What is your first language?"},
-        {prompt: "8b.If responded NO to question 8: At what age did you learn English?"},
-        {prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)"},
-    ],
-  data:{ typeoftrial: 'participant demographics'}
+    questions: [
+        { prompt: "1. How old are you?", name: 'age' , required: true},
+        { prompt: "2. What is your gender?", name: 'gender', required: true },
+        { prompt: "3. How many years of formal education have you had?<br>(consider graduating high school to be 12 years)", name: 'education_years', required: true },
+        { prompt: "4. Are you of Hispanic, Latino/a/x or of Spanish origin?", name: 'hispanic_origin', required: true }
+        ],
+    on_finish: function(data) {
+        // Log each response to the console
+        console.log("Age:", data.response.age);
+        console.log("Gender:", data.response.gender);
+        console.log("Years of Education:", data.response.education_years);
+        console.log("Hispanic Origin:", data.response.hispanic_origin);
+    }
 };
 
+var participant_race = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "5. Please specify all the racial categories that apply to you:",
+            options: ['American Indian/Alaskan Native',
+            'Asian',
+            'Black/African American',
+            'Native Hawaiian or Other Pacific Islander',
+            'White/Caucasian',
+            'More than one race',
+            'Other'],
+            horizontal: true,
+            required: true,
+            name: 'race'
+        }
+    ],
+    on_finish: function(data) {
+        console.log("Racial categories selected:", data.response.race);
 
-    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure, final_instructions]);
-    //jspsych.run([initial_instructions, training_plus_association, priming_instructions,priming_procedure, final_instructions])
-    jspsych.run([priming_procedure])
+    }
+};
+
+var time_of_day_alert = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "6. Please indicate what time of the day you feel most alert:",
+            options: ["Morning", "Afternoon", "Evening", "No differences"],
+            horizontal: true,
+            required: true,
+            name: 'time_of_day_most_alert'
+        }
+    ],
+    data: { typeoftrial: 'time_of_day' },
+    on_finish: function(data) {
+        console.log("Time of day most alert:", data.response.time_of_day_most_alert);
+    }
+};
+
+var dominant_hand = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "7. What is your dominant hand?",
+            options: ["Right", "Left", "Ambidextrous"],
+            horizontal: true,
+            required: true,
+            name: 'dominant_hand'
+        }
+    ],
+    data: { typeoftrial: 'dominant_hand' },
+    on_finish: function(data) {
+        console.log("Dominant hand:", data.response.dominant_hand);
+    }
+};
+
+var demographics_1 = {
+    type: jsPsychSurveyText,
+    questions: [
+        { prompt: "8. Is English your first language? (Yes/No)" },
+        { prompt: "8a. If responded NO to question 8: What is your first language?" },
+        { prompt: "8b. If responded NO to question 8: At what age did you learn English?" },
+        { prompt: "9. Is there anything else we should know about,<br>which might have affected your performance during the experiment?<br>(e.g. lack of sleep, feeling ill, etc.)" }
+    ],
+    on_finish: function(data) {
+        console.log("Language and other:", data.response);
+    }
+};
+
+var timeline = [participant_race, time_of_day_alert, dominant_hand, demographics_1];
+
+var thank_you = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: 'Thank you! You can press any key to end the experiment.',
+    data: {
+        typeoftrial: 'thank_you'
+    },
+}
+
+
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
+//jsPsych.run([training_procedure])
         </script>
 </HTML>
