@@ -241,6 +241,10 @@ var priming_feedback= {
     }
 }
 
+var CONDITION = jsPsych.randomization.sampleWithoutReplacement([...Array(2).keys()],1)[0];
+console.log("CONDITION=" + CONDITION);
+
+
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
         timeline_variables: test_stimuli_1,
