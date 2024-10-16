@@ -1,4 +1,4 @@
-[
+var test_stimuli_1 = [
   {
     "Diad": 2,
     "Pair": "dodsy cash",

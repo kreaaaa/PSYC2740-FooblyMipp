@@ -244,6 +244,8 @@ var priming_feedback= {
 var CONDITION = jsPsych.randomization.sampleWithoutReplacement([...Array(2).keys()],1)[0];
 console.log("CONDITION=" + CONDITION);
 
+var experiment_stimuli = get_stimuli(CONDITION)
+
 
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
@@ -363,6 +365,10 @@ var thank_you = {
     },
 }
 
+function get_stimuli(CONDITION){
+    if (CONDITION == 0){return test_stimuli_1}
+    else{return test_stimuli_2}
+}
 
 jspsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
 //jsPsych.run([training_procedure])
