@@ -130,6 +130,13 @@ var attention_conditional= {
             else {return false;}
         }
     }
+
+var training_procedure= {
+        timeline:[sentence, attention_conditional],
+        timeline_variables: list_of_sentences_1,
+        randomize_order: true,
+    };
+
 var association = {
     type: jsPsychSurveyText,
     preamble: 'Type in the first word that comes to mind when you see the word below:',
@@ -229,19 +236,19 @@ var target = {
 }
 
 var priming_feedback = {
-    timeline: [slow_experiment_trial],
-    conditional_function: function(){
+        timeline: [slow_experiment_trial],
+        conditional_function: function(){
         // get the data from the previous trial and check if rt is greater than 800 ms 
         var rt = jsPsych.data.get().last(1).values()[0].rt;
-        if (rt > 800) {
-            return true;
+                if (rt > 800) {
+                return true;
         } else {
-            return false;
-        }
+                return false;
+            }
     },
-    data: {
+        data: {
         typeoftrial: 'fixation'
-    }
+        }
 };
 
 
@@ -253,6 +260,11 @@ var priming_procedure = {
         repetitions: 2
 };
 
+var training_procedure ={
+    timeline: [sentence, attention_conditional],
+    timeline_variables: sentences,
+    randomize_order: true
+}
 
 var ending_instructions = {
 type: jsPsychInstructions,
