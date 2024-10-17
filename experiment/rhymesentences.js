@@ -1,4 +1,4 @@
-var test_stimuli_2= [
+var = test_stimuli_2= [
   {
     "Diad": 2,
     "Pair": "fash cash",
