@@ -21,6 +21,7 @@
 
         const jsPsych= initJsPsych ();
         var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
+        console.log ("random_attention_trials =" + random_attention_trials);
 
 var id = Math.floor(Math.random() * 1000000000);
 console.log("id=", id)
@@ -31,13 +32,19 @@ jsPsych.data.addProperties({
     ID: id
 });
 
+var CONDITION = jsPsych.randomization.sampleWithoutReplacement([...Array(2).keys()],1)[0];
+
+var experiment_stimuli = get_stimuli(CONDITION)
+console.log("CONDITION=" + CONDITION);
+console.log("experiment_stimuli=" + experiment_stimuli);
+
 var preload = {
     type:jsPsychPreload,
     auto_preload: true,
-    images: ['horseapple.png', 'applehorse.png']
+    images: ['cash-rock.png', 'rock-cash.png']
 }
 
-console.log ("random_attention_trials =" + random_attention_trials);
+
       
 var initial_instructions = {
     type: jsPsychInstructions,
@@ -139,11 +146,15 @@ var association = {
 
 var association_procedure= {
         timeline: [association],
-        timeline_variables: association_cues_1,
+        timeline_variables: experiment_stimuli[1],
         randomize_order: true,
         repetitions: 3 
     };
-
+    var training_procedure= {
+        timeline:[sentence, attention_conditional],
+        timeline_variables: experiment_stimuli[0],
+        randomize_order: true,
+    }
 var training_plus_association ={
         timeline: [training_procedure, association_instructions, association_procedure],
         repetitions: 3
@@ -217,42 +228,31 @@ var target = {
     }
 }
 
-var priming_feedback= {
-        timeline: [slow_experiment_trial],
-        conditional_function: function(){
-            // get the data from the previous trial
-            // and check if rt is greater than 800 ms 
-            var rt = jsPsych.data.get().last(1).values ()[0].rt 
-                if (rt > 800) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        data: {
-        typeoftrial: 'fixation'
+var priming_feedback = {
+    timeline: [slow_experiment_trial],
+    conditional_function: function(){
+        // get the data from the previous trial and check if rt is greater than 800 ms 
+        var rt = jsPsych.data.get().last(1).values()[0].rt;
+        if (rt > 800) {
+            return true;
+        } else {
+            return false;
         }
+    },
+    data: {
+        typeoftrial: 'fixation'
     }
-}
+};
 
-var CONDITION = jsPsych.randomization.sampleWithoutReplacement([...Array(2).keys()],1)[0];
-console.log("CONDITION=" + CONDITION);
-
-var experiment_stimuli = get_stimuli(CONDITION)
 
 
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
-        timeline_variables: test_stimuli_1,
+        timeline_variables: experiment_stimuli[2],
         randomize_order: true,
         repetitions: 2
 };
 
-var training_procedure= {
-        timeline:[sentence, attention_conditional],
-        timeline_variables: practice_stimuli_1,
-        randomize_order: true,
-    };
 
 var ending_instructions = {
 type: jsPsychInstructions,
@@ -360,7 +360,7 @@ var thank_you = {
 }
 
 function get_stimuli(CONDITION){
-    if (CONDITION == 0){return test_stimuli_1}
+    if (CONDITION == 0){return [test_stimuli_1,association_cues_1,priming_stimuli_1 ]}
     else{return test_stimuli_2}
 }
 
