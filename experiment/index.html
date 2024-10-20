@@ -44,7 +44,6 @@ var preload = {
     images: ['cash-rock.png', 'rock-cash.png']
 }
 
-
       
 var initial_instructions = {
     type: jsPsychInstructions,
@@ -58,17 +57,18 @@ show_clickable_nav: true
     
 var association_instructions= {
             type: jsPsychInstructions,
-            pages: [ 
-        'Done with sentences. Association time. Please respond with the first word you think of.'
-        ],
+            pages: [
+            'You are done with the first part! <br> In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
+            ],
         show_clickable_nav: true
         }
-        var priming_instructions= {
+
+var priming_instructions= {
             type: jsPsychInstructions,
-            pages: [ 
-        'This is our final game.<br>You will be presented with slides showing an apple and a horse.<br>Your task will be to respond as quickly as possible, on which side of the screen the apple or the horse is shown.<br>On the same screen, with pictures, two words will be presented. Read the first word,<br>but respond in accordance with the second word. For example, if you see words “boff” and “apple”,<br>respond where the apple is. If you see words “boff” and “horse”, respond where the horse is.',
-        'You will press A if you want to choose the picture on the left and <br> L if you want to choose the picture on the right'
-        ],
+            pages: [
+            'This is our final game.<br>You will be presented with slides showing an apple and a horse.<br>Your task will be to respond as quickly as possible, on which side of the screen the apple or the horse is shown.<br>On the same screen, with pictures, two words will be presented. Read the first word,<br>but respond in accordance with the second word. For example, if you see words “boff” and “apple”,<br>respond where the apple is. If you see words “boff” and “horse”, respond where the horse is.',
+            'You will press A if you want to choose the picture on the left and <br><br> L if you want to choose the picture on the right'
+            ],
         show_clickable_nav: true 
     }
 
@@ -76,7 +76,7 @@ var association_instructions= {
     
     var sentence = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('sentence'),
+      stimulus: jsPsych.timelineVariable('experiment_stimuli[0]'),
       choices: [' '],
       on_finish: function(data) {
         last_trial_index = (data.trial_index + 1 ) % 40 ;
@@ -96,7 +96,6 @@ data: {
     var attention = {
     type: jsPsychSurveyText,
     questions: [{prompt: "Type any ONE novel word from the previous sentence:"}],
-//two forward slashes to take notes
     data: {
         typeoftrial: 'attention',
     },
@@ -133,18 +132,18 @@ var attention_conditional= {
 
 var training_procedure= {
         timeline:[sentence, attention_conditional],
-        timeline_variables: list_of_sentences_1,
+        timeline_variables: experiment_stimuli[0],
         randomize_order: true,
     };
 
 var association = {
     type: jsPsychSurveyText,
     preamble: 'Type in the first word that comes to mind when you see the word below:',
-    questions: [{prompt: jsPsych.timelineVariable('cue')}],
+    questions: [{prompt: jsPsych.timelineVariable('experiment_stimuli[2]')}],
     trial_duration: 10,
     data: {
         typeoftrial: 'association',
-        cue: jsPsych.timelineVariable('cue')
+        cue: jsPsych.timelineVariable('experiment_stimuli[2]')
     },
     on_finish: function(data){
         data.response = data.response.Q0
@@ -153,15 +152,11 @@ var association = {
 
 var association_procedure= {
         timeline: [association],
-        timeline_variables: experiment_stimuli[1],
+        timeline_variables: experiment_stimuli[2],
         randomize_order: true,
         repetitions: 3 
     };
-    var training_procedure= {
-        timeline:[sentence, attention_conditional],
-        timeline_variables: experiment_stimuli[0],
-        randomize_order: true,
-    }
+
 var training_plus_association ={
         timeline: [training_procedure, association_instructions, association_procedure],
         repetitions: 3
@@ -251,20 +246,14 @@ var priming_feedback = {
         }
 };
 
-
-
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
-        timeline_variables: experiment_stimuli[2],
+        timeline_variables: experiment_stimuli[1],
         randomize_order: true,
         repetitions: 2
 };
 
-var training_procedure ={
-    timeline: [sentence, attention_conditional],
-    timeline_variables: sentences,
-    randomize_order: true
-}
+
 
 var ending_instructions = {
 type: jsPsychInstructions,
@@ -371,10 +360,17 @@ var thank_you = {
     },
 }
 
-function get_stimuli(CONDITION){
-    if (CONDITION == 0){return [test_stimuli_1,association_cues_1,priming_stimuli_1 ]}
-    else{return test_stimuli_2}
+function get_stimuli(CONDITION) {
+    if (CONDITION == 0) {
+        return [nonrhyme_sent, nonrhyme_test_stimuli, association_cues_nonrhyme];
+    } else {
+        return [rhyme_sent, rhyme_test_stimuli, association_cues_rhyme];
+    }
 }
+//function get_stimuli(CONDITION){
+  //  if (CONDITION == 0){return [nonrhyme_sent, nonrhyme_test_stimuli, association_cues_nonrhyme]}
+    //else{return rhyme_sent, rhyme_test_stimuli, association_cues_rhyme}
+//}
 
 jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, training_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
 //jsPsych.run([training_procedure])

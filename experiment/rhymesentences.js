@@ -1,4 +1,4 @@
-var = test_stimuli_2= [
+var rhyme_sent= [
   {
     "Diad": 2,
     "Pair": "fash cash",

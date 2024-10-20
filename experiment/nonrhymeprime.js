@@ -1,4 +1,4 @@
-var practice_stimuli_1= [
+var practice_stimuli= [
   {
     "block_number": "practice",
     "triad": 1,
@@ -91,7 +91,7 @@ var practice_stimuli_1= [
     "correct_key": "L"
   },
 ]
-  var test_stimuli_1 = [
+  var nonrhyme_test_stimuli = [
   {
     "block_number": "practice",
     "triad": 1,

@@ -1,4 +1,4 @@
-var test_stimuli_1 = [
+var nonrhyme_sent = [
   {
     "Diad": 2,
     "Pair": "dodsy cash",
