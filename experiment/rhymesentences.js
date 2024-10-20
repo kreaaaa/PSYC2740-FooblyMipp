@@ -1,4 +1,4 @@
-var rhyme_sent= [
+var rhyme_sentences= [
   {
     "Diad": 2,
     "Pair": "fash cash",

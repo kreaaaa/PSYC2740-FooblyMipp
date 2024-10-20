@@ -6,10 +6,11 @@
         <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
-        <script src="jspsych/modified-image-plugin copy.js"></script>
+        <script src="jspsych/modified-image-plugin.js"></script>
         <script src="nonrhymeprime.js"></script>
         <script src="nonrhymesentences.js"></script>
         <script src="association1.js"></script>
+        <script src="association2.js"></script>
         <script src="rhymeprime.js"></script>
         <script src="rhymesentences.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
@@ -35,8 +36,8 @@ jsPsych.data.addProperties({
 var CONDITION = jsPsych.randomization.sampleWithoutReplacement([...Array(2).keys()],1)[0];
 
 var experiment_stimuli = get_stimuli(CONDITION)
-console.log("CONDITION=" + CONDITION);
-console.log("experiment_stimuli=" + experiment_stimuli);
+//console.log("CONDITION=" + CONDITION);
+//console.log("experiment_stimuli=" + experiment_stimuli);
 
 var preload = {
     type:jsPsychPreload,
@@ -44,7 +45,6 @@ var preload = {
     images: ['cash-rock.png', 'rock-cash.png']
 }
 
-      
 var initial_instructions = {
     type: jsPsychInstructions,
     pages: [
@@ -58,7 +58,7 @@ show_clickable_nav: true
 var association_instructions= {
             type: jsPsychInstructions,
             pages: [
-            'You are done with the first part! <br> In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
+            'In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
             ],
         show_clickable_nav: true
         }
@@ -72,11 +72,11 @@ var priming_instructions= {
         show_clickable_nav: true 
     }
 
-    var sentence_number= 0; 
+var sentence_number= 0; 
     
-    var sentence = {
+var sentence = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('experiment_stimuli[0]'),
+      stimulus: jsPsych.timelineVariable('sentence'),
       choices: [' '],
       on_finish: function(data) {
         last_trial_index = (data.trial_index + 1 ) % 40 ;
@@ -89,7 +89,6 @@ data: {
         sentence: jsPsych.timelineVariable('sentence'),
         novel1: jsPsych.timelineVariable('novel1'),
         novel2: jsPsych.timelineVariable('novel2'),
-        novel3: jsPsych.timelineVariable('novel3')
     }
 }
 
@@ -106,13 +105,11 @@ data: {
 
     data.novel1= last_trial_data.novel1;
     data.novel2= last_trial_data.novel2;
-    data.novel3= last_trial_data.novel3;
     data.response = data.response.Q0;
 
     if(
         jsPsych.pluginAPI.compareKeys(data.response, data.novel1) ||
-        jsPsych.pluginAPI.compareKeys(data.response, data.novel2) ||
-        jsPsych.pluginAPI.compareKeys(data.response, data.novel3) 
+        jsPsych.pluginAPI.compareKeys(data.response, data.novel2) 
     ){
         data.correct = 1;
         console.log("correct=" + data.correct);
@@ -139,11 +136,11 @@ var training_procedure= {
 var association = {
     type: jsPsychSurveyText,
     preamble: 'Type in the first word that comes to mind when you see the word below:',
-    questions: [{prompt: jsPsych.timelineVariable('experiment_stimuli[2]')}],
+    questions: [{prompt: jsPsych.timelineVariable('cue')}],
     trial_duration: 10,
     data: {
         typeoftrial: 'association',
-        cue: jsPsych.timelineVariable('experiment_stimuli[2]')
+        cue: jsPsych.timelineVariable('cue')
     },
     on_finish: function(data){
         data.response = data.response.Q0
@@ -179,25 +176,27 @@ var fixation = {
         }
     };
     
+
 var image = {
     type: jsPsychImageKeyboardResponse,
     stimulus: jsPsych.timelineVariable('image_path'),
-    choices: ['NO_KEYS'],
+    choices : "NO_KEYS",
     trial_duration: 500,
-    stimulus_width: 500,
-    maintain_aspect_ratio: true,
-    prompt:"<span style = 'font-size:200%'><br><br></span>",
-    data: {
+      stimulus_width: 500,
+      maintain_aspect_ratio: true,
+      prompt: "<span style= 'font-size:200%'><br><br></span>",
+      data: {
         typeoftrial: 'image',
       },
-};
+    }
+
 
 var prime = {
     type: jsPsychImageKeyboardResponse,
     //  trial_duration: 300,
     stimulus: jsPsych.timelineVariable('image_path'),
     choices: "NO_KEYS",
-    trial_duration: 500,
+    trial_duration: 300,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt: function () {
@@ -224,7 +223,6 @@ var target = {
         correct_key: jsPsych.timelineVariable('correct_key'),
         block_number: jsPsych.timelineVariable('block_number')
     },
-
     on_finish: function(data){
     data.correct= jsPsych.pluginAPI.compareKeys(data.response, data.correct_key);
     }
@@ -247,13 +245,17 @@ var priming_feedback = {
 };
 
 var priming_procedure = {
-  timeline:[fixation,image,prime,target,priming_feedback],
+  timeline:[fixation, image, prime, target, priming_feedback],
         timeline_variables: experiment_stimuli[1],
         randomize_order: true,
         repetitions: 2
 };
 
-
+var practice_procedure = {
+    timeline: [fixation, image, prime, target, priming_feedback],
+    timeline_variables : practice_stimuli,
+    randomize_order: true,
+}
 
 var ending_instructions = {
 type: jsPsychInstructions,
@@ -360,19 +362,16 @@ var thank_you = {
     },
 }
 
+
 function get_stimuli(CONDITION) {
     if (CONDITION == 0) {
-        return [nonrhyme_sent, nonrhyme_test_stimuli, association_cues_nonrhyme];
-    } else {
-        return [rhyme_sent, rhyme_test_stimuli, association_cues_rhyme];
+        return [nonrhyme_sentences, nonrhyme_test_stimuli, association_cues_nonrhyme]
+    } else if (CONDITION == 1) {
+        return [rhyme_sentences, rhyme_test_stimuli, association_cues_rhyme]
     }
 }
-//function get_stimuli(CONDITION){
-  //  if (CONDITION == 0){return [nonrhyme_sent, nonrhyme_test_stimuli, association_cues_nonrhyme]}
-    //else{return rhyme_sent, rhyme_test_stimuli, association_cues_rhyme}
-//}
 
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, training_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
-//jsPsych.run([training_procedure])
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, training_procedure, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
+
         </script>
 </HTML>

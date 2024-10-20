@@ -1,5 +1,4 @@
-var nonrhyme_sent = [
-  {
+var nonrhyme_sentences = [ {
     "Diad": 2,
     "Pair": "dodsy cash",
     "Part": "training",
