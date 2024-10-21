@@ -369,9 +369,11 @@ function get_stimuli(CONDITION) {
     } else if (CONDITION == 1) {
         return [rhyme_sentences, rhyme_test_stimuli, association_cues_rhyme]
     }
+
+console.log("Priming stimuli: ", experiment_stimuli[1]);
 }
 
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, training_procedure, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
 
         </script>
 </HTML>
