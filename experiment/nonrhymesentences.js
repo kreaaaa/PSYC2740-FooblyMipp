@@ -42,7 +42,7 @@ var nonrhyme_sentences = [ {
     "Diad": 2,
     "Pair": "dodsy cash",
     "Part": "training",
-    "sentence": "I hadn't seen  dodsy cash for hours.",
+    "sentence": "I hadn't seen dodsy cash for hours.",
     "novel1": "dodsy",
     "novel2": ""
   },

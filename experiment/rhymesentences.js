@@ -43,7 +43,7 @@ var rhyme_sentences= [
     "Diad": 2,
     "Pair": "fash cash",
     "Part": "training",
-    "sentence": "I hadn't seen  fash cash for hours.",
+    "sentence": "I hadn't seen fash cash for hours.",
     "novel1": "fash",
     "novel2": ""
   },
