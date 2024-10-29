@@ -21,11 +21,11 @@
     <script> 
 
         const jsPsych= initJsPsych ();
-        var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
-        console.log ("random_attention_trials =" + random_attention_trials);
+        var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([ ... Array (15). keys ()]. map (x => x+ 5), 3);
+        //console.log ("random_attention_trials =" + random_attention_trials);
 
 var id = Math.floor(Math.random() * 1000000000);
-console.log("id=", id)
+//console.log("id=", id)
 
 //tag all trials with ID
 
@@ -55,14 +55,14 @@ var initial_instructions = {
 show_clickable_nav: true
 }
 
-        var association_instructions_1= {
+var association_instructions_1= {
             type: jsPsychInstructions,
             pages: [
             'In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. This segment will be repeated three times. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
             ],
         show_clickable_nav: true
         };
-        var association_instructions_2= {
+ var association_instructions_2= {
             type: jsPsychInstructions,
             pages: [
             'In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. This is the second block. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
@@ -70,7 +70,7 @@ show_clickable_nav: true
         show_clickable_nav: true
         };
 
-        var association_instructions_3= {
+var association_instructions_3= {
             type: jsPsychInstructions,
             pages: [
             'In this segment, you will be asked to type in the first word that comes to your mind when you hear or read a given word. This is the last block. <br> Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
@@ -82,7 +82,7 @@ show_clickable_nav: true
 var priming_instructions= {
             type: jsPsychInstructions,
             pages: [
-            'This is our final game.<br>You will be presented with slides showing an apple and a horse.<br>Your task will be to respond as quickly as possible, on which side of the screen the apple or the horse is shown.<br>On the same screen, with pictures, two words will be presented. Read the first word,<br>but respond in accordance with the second word. For example, if you see words “boff” and “apple”,<br>respond where the apple is. If you see words “boff” and “horse”, respond where the horse is.',
+            'This is our final game.<br>You will be presented with slides showing a pile of cash and a bag of trash.<br>Your task will be to respond as quickly as possible, on which side of the screen the pile of cash or the bag of trash is shown.<br>On the same screen, with pictures, two words will be presented. Read the first word,<br>but respond in accordance with the second word. For example, if you see words “boff” and “cash”,<br>respond where the pile of cash is. If you see words “boff” and “trash”, respond where the bag of trash is.',
             'You will press A if you want to choose the picture on the left and <br><br> L if you want to choose the picture on the right'
             ],
         show_clickable_nav: true 
@@ -95,10 +95,10 @@ var sentence = {
       stimulus: jsPsych.timelineVariable('sentence'),
       choices: [' '],
       on_finish: function(data) {
-        last_trial_index = (data.trial_index + 1 ) % 40 ;
-        console.log ("last_trial_index = " + last_trial_index);
-        sentence_number = (sentence_number + 1 ) % 40;
-       console.log ("sentence_number = " + sentence_number);
+        last_trial_index = (data.trial_index + 1 ) % 20 ;
+        //console.log ("last_trial_index = " + last_trial_index);
+        sentence_number = (sentence_number + 1 ) % 20;
+       //console.log ("sentence_number = " + sentence_number);
     },
 data: {
         typeoftrial: 'sentence',
@@ -108,17 +108,16 @@ data: {
     }
 }
 
-    var attention = {
+var attention = {
     type: jsPsychSurveyText,
-    questions: [{prompt: "Type any ONE novel word from the previous sentence:"}],
+    questions: [{prompt: "  <span style='color'; lue;''>Type any ONE novel word from the previous sentence:"}],
     data: {
         typeoftrial: 'attention',
     },
 
     on_finish: function (data){
         var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'sentence'}). last(1).values()[0];
-    console.log("last_trial_data= ", last_trial_data);
-
+   
     data.novel1= last_trial_data.novel1;
     data.novel2= last_trial_data.novel2;
     data.response = data.response.Q0;
@@ -128,10 +127,11 @@ data: {
         jsPsych.pluginAPI.compareKeys(data.response, data.novel2) 
     ){
         data.correct = 1;
-        console.log("correct=" + data.correct);
+       // console.log("correct=" + data.correct);
     } else {
         data.correct = 0;
-        console.log("correct=" + data.correct);}
+       //console.log("correct=" + data.correct);
+    }
 }
 }
 
@@ -149,7 +149,7 @@ var training_procedure= {
         randomize_order: true,
     };
 
-    var practice_feedback = {
+var practice_feedback = {
    type: jsPsychHtmlKeyboardResponse,
    stimulus:  function(){
      var rt = jsPsych.data.get().last(1).values()[0].rt;
@@ -173,6 +173,15 @@ var training_procedure= {
    }
  }
 
+ var fixation = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '+',
+    choices: ['NO_KEYS'],
+    trial_duration: 500, 
+    data: {
+    typeoftrial: 'fixation'
+        }
+    };
 
 var association = {
     type: jsPsychSurveyText,
@@ -187,16 +196,21 @@ var association = {
         data.response = data.response.Q0
     }
 }
+var sentence_instructions= {
+    type: jsPsychInstructions,
+    pages: ['Great work finishing the association block. You will now read the sentences again. <br> Remember, press SPACEBAR when you have read the sentence and want to move on to the next.'],
+    show_clickable_nav: true
+}
 
 var association_procedure= {
-        timeline: [association],
+        timeline: [fixation, association],
         timeline_variables: experiment_stimuli[2],
         randomize_order: true,
         repetitions: 3 
     };
 
 var training_plus_association ={
-        timeline: [training_procedure, association_instructions_1, association_procedure, training_procedure, association_instructions_2, association_procedure, training_procedure, association_instructions_3, association_procedure],
+        timeline: [training_procedure, association_instructions_1, association_procedure, sentence_instructions, training_procedure, association_instructions_2, association_procedure, sentence_instructions,training_procedure, association_instructions_3, association_procedure],
         repetitions: 1
     };
 
@@ -207,15 +221,7 @@ var slow_experiment_trial = {
         trial_duration: 1500
     };
 
-var fixation = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '+',
-    choices: ['NO_KEYS'],
-    trial_duration: 500, 
-    data: {
-    typeoftrial: 'fixation'
-        }
-    };
+
     
 
 var image = {
@@ -316,10 +322,10 @@ var demographics = {
         ],
     on_finish: function(data) {
         // Log each response to the console
-        console.log("Age:", data.response.age);
-        console.log("Gender:", data.response.gender);
-        console.log("Years of Education:", data.response.education_years);
-        console.log("Hispanic Origin:", data.response.hispanic_origin);
+        //console.log("Age:", data.response.age);
+        //console.log("Gender:", data.response.gender);
+        //console.log("Years of Education:", data.response.education_years);
+        //console.log("Hispanic Origin:", data.response.hispanic_origin);
     }
 };
 
@@ -341,7 +347,7 @@ var participant_race = {
         }
     ],
     on_finish: function(data) {
-        console.log("Racial categories selected:", data.response.race);
+        //console.log("Racial categories selected:", data.response.race);
 
     }
 };
@@ -359,7 +365,7 @@ var time_of_day_alert = {
     ],
     data: { typeoftrial: 'time_of_day' },
     on_finish: function(data) {
-        console.log("Time of day most alert:", data.response.time_of_day_most_alert);
+       // console.log("Time of day most alert:", data.response.time_of_day_most_alert);
     }
 };
 
@@ -376,7 +382,7 @@ var dominant_hand = {
     ],
     data: { typeoftrial: 'dominant_hand' },
     on_finish: function(data) {
-        console.log("Dominant hand:", data.response.dominant_hand);
+       // console.log("Dominant hand:", data.response.dominant_hand);
     }
 };
 
@@ -389,7 +395,7 @@ var demographics_1 = {
         { prompt: "9. Is there anything else we should know about,<br>which might have affected your performance during the experiment?<br>(e.g. lack of sleep, feeling ill, etc.)" }
     ],
     on_finish: function(data) {
-        console.log("Language and other:", data.response);
+        //console.log("Language and other:", data.response);
     }
 };
 

@@ -90,6 +90,19 @@ var practice_stimuli= [
     "image_path": "rock-cash.png",
     "correct_key": "L"
   },
+  {
+    "block_number": "practice",
+    "triad": 1,
+    "target_image_pair": "rock-cash",
+    "part": "priming",
+    "prime_word": "boff",
+    "target_word": "rock",
+    "type": "novel",
+    "relatedness": "novel",
+    "correct_response": 3,
+    "image_path": "cash-rock.png",
+    "correct_key": "L"
+  }
 ]
 
   var nonrhyme_test_stimuli = [
