@@ -12,11 +12,14 @@
         <script src="association1.js"></script>
         <script src="association2.js"></script>
         <script src="rhymeprime.js"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.0.0"></script>
         <script src="rhymesentences.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0">
+            
+        </script>
     </head>
     <body> </body>
     <script> 
@@ -49,8 +52,8 @@ var preload = {
 var initial_instructions = {
     type: jsPsychInstructions,
     pages: [
-    'How do we learn new words? <br><br> Most of the words we know we learned spontaneously, like when hearing a novel word while listening to <br> someone speaking, watching TV or while reading. In this study, your task will be to simply read sentences <br> containing new words. After the reading session, we will ask you to use these novel words in a word game. <br> This experiment has three blocks. Each block has reading and testing session.<br> Are you ready to start?',
-    'We will present one sentence at a time. <br>Read them carefully. When you are ready, press space bar for the next sentence. <br>In order to make sure you are reading carefully, there will be surprise questions during the reading session. <br><br>You will be asked to type in the novel words from the last sentence you read. <br>Minor spelling mistakes will be tolerated. <br>Type in your answer and press enter when you are ready to move on to the next sentence.',
+    'How do we learn new words? <br><br> Most of the words we know we learned spontaneously, like when hearing a novel word while listening to <br> someone speaking, watching TV or while reading. <br><br>In this study, your task will be to simply read sentences <br> containing new words. After the reading session, we will ask you to use these novel words in a word game. <br> This experiment has three blocks. Each block has reading and testing session.<br> Are you ready to start?',
+    'We will present one sentence at a time. <br><br> Read them carefully. When you are ready, press space bar for the next sentence. <br>In order to make sure you are reading carefully, there will be surprise questions during the reading session. <br><br>You will be asked to type in the novel words from the last sentence you read. <br>Minor spelling mistakes will be tolerated. <br>Type in your answer and press enter when you are ready to move on to the next sentence.',
     'You will now read the sentences. <br> Press SPACEBAR when you have read the sentence and want to move on to the next.'
     ],
 show_clickable_nav: true
@@ -253,11 +256,29 @@ var priming_procedure = {
         repetitions: 2
 };
 
+var feedback = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+        // Get the last trial data and check if the answer was correct
+        var last_trial_data = jsPsych.data.get().last(1).values()[0];
+        console.log("last_trial_data=", last_trial_data);
+
+        if (last_trial_data.correct === 1) {
+            return "You got it correct!";
+        } else {
+            return "That was the wrong answer.";
+        }
+    },
+   // Adjust duration as needed
+    data: { typeoftrial: 'feedback' }
+
+};
 var practice_procedure = {
-    timeline: [fixation, image, prime, target, priming_feedback],
+    timeline: [fixation, image, prime, target,feedback],
     timeline_variables : practice_stimuli,
     randomize_order: true,
-}
+};
+
 
 
 var ending_instructions = {
@@ -367,7 +388,7 @@ conditional_function: function() {
 }
 }
 
-var timeline = [demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4, follow_up_question, additional_info_question];
+var timeline = [demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4, follow_up_questions, additional_info_question];
 
 var thank_you = {
     type: jsPsychHtmlKeyboardResponse,
@@ -385,8 +406,8 @@ function get_stimuli(CONDITION) {
         return [rhyme_sentences, rhyme_test_stimuli, association_cues_rhyme]
     }
 }
-
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, timeline, thank_you]);
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, timeline, thank_you]);
+jsPsych.run([practice_procedure]);
 
         </script>
 </HTML>
