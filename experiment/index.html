@@ -16,6 +16,7 @@
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
     </head>
     <body> </body>
     <script> 
@@ -326,6 +327,16 @@ var demographics_survey3 = {
     },
 }
 
+var additional_info_question = {
+    type: jsPsychSurveyText,
+    questions: [
+        {prompt: "Is there anything elsewe should know about, which might haveaffected your performance during this experiment?"}
+],
+data: { 
+    typeoftrial: 'demographics'
+    }
+}
+
 var demographics_survey4 = {
     type: jsPsychHtmlButtonResponse,
     stimulus: "Is English your first language?",
@@ -336,7 +347,27 @@ data: {
 },
 }
 
-var timeline = [demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4];
+var follow_up_questions = {
+    type: jsPsychSurveyText,
+    preamble: "You have indicated that English is not your first language. Please answer the following questions:",
+    questions: [
+        {prompt: "What is your first language?",
+        name: 'first_language_detail'},
+        {prompt: "At what age did you learn English?", name: 'age_learned_english'}
+    ],
+    data: {
+        typeoftrial: 'follow_up_demographics'
+    }
+}
+var follow_up_procedure = {
+    timeline: [follow_up_questions],
+conditional_function: function() {
+    var lastTrialData = jsPsych.data.get().last(1).values()[0];
+    return lastTrialData.response == 1;
+}
+}
+
+var timeline = [demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4, follow_up_question, additional_info_question];
 
 var thank_you = {
     type: jsPsychHtmlKeyboardResponse,
@@ -355,7 +386,7 @@ function get_stimuli(CONDITION) {
     }
 }
 
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1, thank_you]);
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, timeline, thank_you]);
 
         </script>
 </HTML>
