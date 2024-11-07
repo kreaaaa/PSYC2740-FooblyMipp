@@ -17,9 +17,7 @@
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0">
-            
-        </script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
     </head>
     <body> </body>
     <script> 
@@ -279,8 +277,6 @@ var practice_procedure = {
     randomize_order: true,
 };
 
-
-
 var ending_instructions = {
 type: jsPsychInstructions,
 pages: [
@@ -290,25 +286,21 @@ show_clickable_nav: true
 }
 
 var demographics_survey1 = {
-    type:jsPsychSurveyText,
-    preamble: "<h2> Demographics Questionaire <h2>", name:'heading', rows:1, columns: 50,
-        questions: [
-            {prompt: "What is your age?",
-                name: 'age',
-                required: true},
-            {prompt: "What is your gender?",
-                name: 'gender',
-                required: true},  
-            {prompt: "How many years of formal education have you had? Consider graduating high school to be 12 years.",
-                name: 'gender',
-                required: true}
-            ],
-            data: {typeoftrial: 'demographics',
-            }    
-         }
+    type: jsPsychSurveyText,
+    preamble: "<h2> Demographics Questionnaire </h2>", 
+    name: 'heading', 
+    rows: 1, 
+    columns: 50,
+    questions: [
+        {prompt: "What is your age?", name: 'age', required: true},
+        {prompt: "What is your gender?", name: 'gender', required: true},
+        {prompt: "How many years of formal education have you had? Consider graduating high school to be 12 years.", name: 'education', required: true}
+    ],
+    data: { typeoftrial: 'demographics' }    
+};
 
 var demographics_survey2 = {
-    type:jsPsychSurveyMultiSelect,
+    type: jsPsychSurveyMultiSelect,
     questions: [
         {
             prompt: "Please select all the racial categories that apply to you:",
@@ -321,7 +313,7 @@ var demographics_survey2 = {
     data: {
         typeoftrial: 'demographics'
     }
-}
+};
 
 var demographics_survey3 = {
     type: jsPsychSurveyMultiChoice,
@@ -332,63 +324,70 @@ var demographics_survey3 = {
             options: ['Yes', 'No'],
             required: true
         },
-        {prompt: "What is your dominant hand?",
-            name: 'dominant_hand',
-            options: ['Right', 'Left', 'Ambidextrous'],
-            required: true
-        },
-        {prompt: " Please indicate what time of day that you feel most alert:",
-        name: 'alert_time',
-        options: ['Morning', 'Afternoon', 'Evening', 'No differences'],
-        required: true
-        },
+        {prompt: "What is your dominant hand?", name: 'dominant_hand', options: ['Right', 'Left', 'Ambidextrous'], required: true},
+        {prompt: " Please indicate what time of day that you feel most alert:", name: 'alert_time', options: ['Morning', 'Afternoon', 'Evening', 'No differences'], required: true},
     ],
     data: {
         typeoftrial: 'demographics',
     },
-}
+};
 
 var additional_info_question = {
     type: jsPsychSurveyText,
     questions: [
-        {prompt: "Is there anything else we should know about, which might haveaffected your performance during this experiment?"}
-],
-data: { 
-    typeoftrial: 'demographics'
-    }
-}
+        {prompt: "Is there anything else we should know about, which might have affected your performance during this experiment?", required: true}
+    ],
+    data: { typeoftrial: 'demographics' }
+};
 
 var demographics_survey4 = {
     type: jsPsychHtmlButtonResponse,
     stimulus: "Is English your first language?",
     choices: ['Yes', 'No'],
-
-data: {
-    typeoftrial: 'demographics'
-},
-}
+    required: true,
+    data: {
+        typeoftrial: 'demographics'
+    },
+};
 
 var follow_up_questions = {
     type: jsPsychSurveyText,
     preamble: "You have indicated that English is not your first language. Please answer the following questions:",
     questions: [
-        {prompt: "What is your first language?",
-        name: 'first_language_detail'},
-        {prompt: "At what age did you learn English?", name: 'age_learned_english'}
+        {prompt: "What is your first language?", name: 'first_language_detail', required: true},
+        {prompt: "At what age did you learn English?", name: 'age_learned_english', required: true}
     ],
     data: {
         typeoftrial: 'follow_up_demographics'
     }
-}
+};
+
 var follow_up_procedure = {
     timeline: [follow_up_questions],
-conditional_function: function() {
-    var lastTrialData = jsPsych.data.get().last(1).values()[0];
-    return lastTrialData.response == 1;
-}
-}
+    conditional_function: function() {
+        var lastTrialData = jsPsych.data.get().last(1).values()[0];
+        return lastTrialData && lastTrialData.response === 1;
+    }
+};
 
-var timeline = [demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4, follow_up_questions, additional_info_question];
+var demographics_procedure = {
+  timeline:[demographics_survey1, demographics_survey2, demographics_survey3, demographics_survey4, follow_up_procedure, additional_info_question],
+        timeline_variables: experiment_stimuli[1],
+        randomize_order: false,
+        repetitions: 0
+};
+
+var demographics_procedure = {
+        timeline: [
+            demographics_survey1, 
+            demographics_survey2, 
+            demographics_survey3, 
+            demographics_survey4, 
+            follow_up_procedure, 
+            additional_info_question
+        ],
+        randomize_order: false,  // You can set this to `true` if you want to randomize the order of surveys
+    };
 
 var thank_you = {
     type: jsPsychHtmlKeyboardResponse,
@@ -407,7 +406,7 @@ function get_stimuli(CONDITION) {
     }
 }
 //jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, timeline, thank_you]);
-jsPsych.run([practice_procedure]);
+jsPsych.run([demographics_procedure]);
 
         </script>
 </HTML>
