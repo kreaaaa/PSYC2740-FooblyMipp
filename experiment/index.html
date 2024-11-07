@@ -96,10 +96,11 @@ data: {
 
     var attention = {
     type: jsPsychSurveyText,
-    questions: [{prompt: "Type any ONE novel word from the previous sentence:"}],
-    data: {
+    questions:[{
+        prompt: '<span style="color: red;">Type any ONE novel word from the previous sentence:</span>',
         typeoftrial: 'attention',
     },
+],
 
     on_finish: function (data){
         var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'sentence'}). last(1).values()[0];
@@ -137,10 +138,9 @@ var training_procedure= {
     };
 
 var association = {
-    type: jsPsychSurveyText,
+  type: jsPsychSurveyText,
     preamble: 'Type in the first word that comes to mind when you see the word below:',
     questions: [{prompt: jsPsych.timelineVariable('cue')}],
-    trial_duration: 10,
     data: {
         typeoftrial: 'association',
         cue: jsPsych.timelineVariable('cue')
@@ -405,8 +405,8 @@ function get_stimuli(CONDITION) {
         return [rhyme_sentences, rhyme_test_stimuli, association_cues_rhyme]
     }
 }
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics_procedure, thank_you]);
-//jsPsych.run([demographics_procedure]);
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics_procedure, thank_you]);
+jsPsych.run([training_plus_association]);
 
         </script>
 </HTML>
