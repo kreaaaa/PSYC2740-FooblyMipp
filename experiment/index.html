@@ -81,9 +81,9 @@ var sentence = {
       stimulus: jsPsych.timelineVariable('sentence'),
       choices: [' '],
       on_finish: function(data) {
-        last_trial_index = (data.trial_index + 1 ) % 40 ;
+        last_trial_index = (data.trial_index + 1 ) % 20 ;
         console.log ("last_trial_index = " + last_trial_index);
-        sentence_number = (sentence_number + 1 ) % 40;
+        sentence_number = (sentence_number + 1 ) % 20;
        console.log ("sentence_number = " + sentence_number);
     },
 data: {
