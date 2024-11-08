@@ -268,7 +268,7 @@ var feedback = {
             return "That was the wrong answer.";
         }
     },
-    
+    trial_duration: 1500,
     data: { typeoftrial: 'feedback' }
 
 };
@@ -407,7 +407,7 @@ function get_stimuli(CONDITION) {
     }
 }
 //jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics_procedure, thank_you]);
-jsPsych.run([training_plus_association]);
+jsPsych.run([priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics_procedure, thank_you]);
 
         </script>
 </HTML>
