@@ -239,7 +239,6 @@ var image = {
 
 var prime = {
     type: jsPsychImageKeyboardResponse,
-    //  trial_duration: 300,
     stimulus: jsPsych.timelineVariable('image_path'),
     choices: "NO_KEYS",
     trial_duration: 300,
@@ -253,12 +252,11 @@ var prime = {
 var target = {
     type: jsPsychImageKeyboardResponse,
     stimulus: jsPsych.timelineVariable('image_path'),
-    // trial_duration: 300,
     choices: ['A', 'L'],
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt:function () {
-        return "<span style= 'font-size: 200%'><br>" + String (jsPsych.timelineVariable('target_word')) + "<br></span>";
+        return "<span style= 'font-size: 200%'><br>" + String(jsPsych.timelineVariable('target_word')) + "<br></span>";
     },
     data: {
         typeoftrial: 'target',
@@ -298,13 +296,6 @@ var priming_feedback = {
         }
 };
 
-var priming_procedure = {
-  timeline:[fixation, image, prime, target, priming_feedback],
-        timeline_variables: experiment_stimuli[1],
-        randomize_order: true,
-        repetitions: 2
-};
-
 var practice_feedback = {
    type: jsPsychHtmlKeyboardResponse,
    stimulus:  function(){
@@ -332,6 +323,15 @@ var practice_procedure = {
     timeline_variables : practice_stimuli,
     randomize_order: true,
 };
+
+var priming_procedure = {
+  timeline:[fixation, image, prime, target, priming_feedback],
+        timeline_variables: experiment_stimuli[1],
+        randomize_order: true,
+        repetitions: 2
+};
+
+console.log("experiment_stimuli[1] = ", experiment_stimuli[1]);
 
 // demographics
 
@@ -505,9 +505,9 @@ function get_stimuli(CONDITION) {
         return [rhyme_sentences, rhyme_test_stimuli, association_cues_rhyme]
     }
 };
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, demographics, thank_you]);
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_procedure, priming_procedure, demographics, thank_you]);
 //jsPsych.run([priming_instructions, practice_procedure, priming_procedure, ending_instructions, demographics_procedure, thank_you]);
-//jsPsych.run([ preload, practice_procedure])
+jsPsych.run([ preload, practice_procedure, priming_procedure])
 
 </script>
 </HTML>
