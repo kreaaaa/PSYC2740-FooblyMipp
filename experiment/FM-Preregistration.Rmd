@@ -7,5 +7,84 @@ editor_options:
 
 ```{r}
 library(tidyverse)
+library(conflicted)
+library(dplyr)
 ```
 
+```{r}
+prereg = read.csv("fooblymippprereg.csv")
+```
+
+```{r}
+ggplot(data = prereg) +
+  geom_histogram(mapping = aes (x = as.numeric(rt)))
+
+range(as.numeric(prereg$rt))
+```
+
+```{r}
+prereg %>%
+  pull(ID) %>% unique () %>% length
+```
+
+```{r}
+prereg = read_csv("fooblymippprereg.csv") %>%
+mutate(rt = as.numeric(rt),
+         relatedness = as.factor(relatedness),
+         type = as.factor(type))
+```
+#from notebook 1
+```{r}
+attention_trials= savic%>% 
+  filter(typeoftrial == "attention") %>% 
+  select(ID, response, novel1, novel2, novel3, correct) %>% 
+    rowwise() %>%
+  mutate(response = ifelse(is.na(response), "blank", response)) %>%
+  mutate(across(c(novel1, novel2, novel3), ~ replace_na(., "NOT_FOUND"))) %>% 
+  mutate(edit_novel1 = adist(novel1, response),
+         edit_novel2 = adist(novel2, response),
+         edit_novel3 = adist(novel3, response)) %>% 
+  mutate(revised_correct = ifelse(edit_novel1 <= 2 |
+                                    edit_novel2 <= 2 |
+                                    edit_novel3 <= 2,
+                                    1, 0),
+          mismatch = ifelse(correct == revised_correct, 0, 1)) %>%
+  ungroup()
+```
+
+#also from notebook 1 
+```{r}
+attention_trials  %>% 
+  summarize(mean_accuracy = mean(revised_correct), 
+            sd_accuracy = sd(revised_correct))
+
+## summarize participant accuracy 
+subject_attention_accuracy = attention_trials  %>% 
+  group_by(ID)  %>% 
+  summarize(mean_accuracy = mean(revised_correct))
+
+# find IDs with less than 75% accuracy
+low_acc_IDs = subject_attention_accuracy  %>% 
+  filter(mean_accuracy < 0.75)  %>% 
+  pull(ID)
+```
+
+```{r}
+priming_data= savic%>% filter(typeoftrial == "target") %>%
+  select (ID, rt, relatedness, prime, response,type, correct, block_number, target, correct_key) %>%
+  filter(!is.na(rt), rt> 200, rt< 1500, correct == "TRUE", block_number == 1) %>%
+  filter(relatedness %in% c("related", "unrelated") & type %in% c("direct", "shared")) %>%
+filter(!ID %in% low_acc_IDs)
+```
+
+```{r}
+priming_data %>%
+  group_by(type, relatedness) %>%
+  summarise(mean_rt = mean(rt)) %>%
+  ggplot() +
+  geom_col(mapping= aes(x= type, y= mean_rt, 
+                        group= relatedness, fill= relatedness),
+           position = "dodge") +
+  theme_bw() +
+  scale_fill_manual(values = c("firebrick2", "lightblue"))
+```
