@@ -1,15 +1,20 @@
 ---
 title: "FM-PreRegistration"
 output: html_notebook
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r}
 library(tidyverse)
 ```
-##conflicts_prefer(dplyr::filter)
+
 
 ```{r}
-prereg = read.csv("fooblymippprereg.csv")
+prereg = read.csv("../data/fooblymippprereg.csv") %>%
+ mutate(rt = as.numeric(rt),
+        relatedness = as.factor(relatedness),
+        condition = as.factor(condition))
 ```
 
 #just to see generally what data looks like. not useful
@@ -18,6 +23,7 @@ ggplot(data = prereg) +
   geom_histogram(mapping = aes (x = as.numeric(rt)))
 
 range(as.numeric(prereg$rt))
+
 ```
 #this shows that all 6 participants data is included
 ```{r}
@@ -27,7 +33,7 @@ prereg %>%
 
 #editing all attention trials to adjust for typos
 ```{r}
-attention_trials_1= prereg%>% 
+attention_trials= prereg%>% 
   filter(typeoftrial == "attention") %>% 
   ##filter(condition == "1") %>%
   select(ID, response, novel1, novel2, correct) %>% 
@@ -45,7 +51,7 @@ attention_trials_1= prereg%>%
 
 #general attention trials sorted by participant ID. only 1 and 4 are greater than 75%
 ```{r}
-attention_trials_1  %>% 
+attention_trials  %>% 
   summarize(mean_accuracy = mean(revised_correct), 
             sd_accuracy = sd(revised_correct))
 
@@ -61,21 +67,39 @@ low_acc_IDs = subject_attention_accuracy  %>%
 ```
 
 ```{r}
-priming_data= prereg%>% filter(typeoftrial == "target") %>%
-  select (ID, rt, relatedness, prime, response, type, correct, block_number, target, correct_key) %>%
+priming_data = prereg %>% filter(typeoftrial == "target") %>%
+  select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>%
   filter(!is.na(rt), rt> 200, rt< 1500, correct == "TRUE", block_number == 1) %>%
   filter(relatedness %in% c("related", "unrelated")) %>%
-filter(!ID %in% low_acc_IDs)
+  filter(!ID %in% low_acc_IDs) %>%
+  filter(condition%in% c("1", "2"))
 ```
 
 ```{r}
 priming_data %>%
-  group_by(type, relatedness) %>%
+  group_by(condition, relatedness) %>%
   summarise(mean_rt = mean(rt)) %>%
   ggplot() +
-  geom_col(mapping= aes(x= type, y= mean_rt, 
+  geom_col(mapping= aes(x= condition, y= mean_rt, 
                         group= relatedness, fill= relatedness),
            position = "dodge") +
   theme_bw() +
   scale_fill_manual(values = c("firebrick2", "lightblue"))
 ```
+
+```{r}
+library(lmerTest)
+
+rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
+```
+
+```{r}
+car::Anova(rt_model)
+nobs(rt_model)
+check_model = rt_model
+```
+
+
+
+
+
