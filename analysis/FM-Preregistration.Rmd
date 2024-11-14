@@ -14,6 +14,8 @@ sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
 
 # repeat for prolific
 
+prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
+  select(-PROLIFIC_PID) %>% mutate(data_source = "prolific")
 
 # bind
 
@@ -28,7 +30,7 @@ final_data = rbind(sona_data, prolific_data) %>%
 
 #just to see generally what data looks like. not useful
 ```{r}
-ggplot(data = prereg) +
+ggplot(data = final_data) +
   geom_histogram(mapping = aes (x = as.numeric(rt)))
 
 range(as.numeric(prereg$rt))
