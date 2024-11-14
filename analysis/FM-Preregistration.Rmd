@@ -14,7 +14,9 @@ library(tidyverse)
 prereg = read.csv("../data/fooblymippprereg.csv") %>%
  mutate(rt = as.numeric(rt),
         relatedness = as.factor(relatedness),
-        condition = as.factor(condition))
+        condition = as.factor(condition))%>%
+  mutate(condition = fct_recode(condition, "non-rhyming" = "1", 
+                                "rhyming" = "2"))
 ```
 
 #just to see generally what data looks like. not useful
@@ -67,12 +69,12 @@ low_acc_IDs = subject_attention_accuracy  %>%
 ```
 
 ```{r}
-priming_data = prereg %>% filter(typeoftrial == "target") %>%
-  select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>%
-  filter(!is.na(rt), rt> 200, rt< 1500, correct == "TRUE", block_number == 1) %>%
-  filter(relatedness %in% c("related", "unrelated")) %>%
+priming_data = prereg %>% filter(typeoftrial == "target") %>% 
+  select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
+  filter(!is.na(rt), rt> 200, rt< 1500, correct == "TRUE", block_number == 1) %>% 
+  filter(relatedness %in% c("related", "unrelated") %>%
   filter(!ID %in% low_acc_IDs) %>%
-  filter(condition%in% c("1", "2"))
+  filter(condition %in% c("1", "2")
 ```
 
 ```{r}
