@@ -1,8 +1,6 @@
 ---
 title: "FM-PreRegistration"
 output: html_notebook
-editor_options: 
-  chunk_output_type: inline
 ---
 
 ```{r}
@@ -11,11 +9,20 @@ library(tidyverse)
 
 
 ```{r}
-prereg = read.csv("../data/fooblymippprereg.csv") %>%
+sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
+  select(-sona_id) %>% mutate(data_source = "sona")
+
+# repeat for prolific
+
+
+# bind
+
+final_data = rbind(sona_data, prolific_data) %>%
  mutate(rt = as.numeric(rt),
         relatedness = as.factor(relatedness),
         condition = as.factor(condition))%>%
-  mutate(condition = fct_recode(condition, "non-rhyming" = "1", 
+  mutate(condition = fct_recode(condition, 
+                                "non-rhyming" = "1",
                                 "rhyming" = "2"))
 ```
 
@@ -31,6 +38,12 @@ range(as.numeric(prereg$rt))
 ```{r}
 prereg %>%
   pull(ID) %>% unique () %>% length
+
+prereg %>% 
+  filter(typeoftrial == "target") %>%
+  group_by(ID) %>% 
+  count()
+
 ```
 
 #editing all attention trials to adjust for typos
@@ -71,10 +84,10 @@ low_acc_IDs = subject_attention_accuracy  %>%
 ```{r}
 priming_data = prereg %>% filter(typeoftrial == "target") %>% 
   select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
-  filter(!is.na(rt), rt> 200, rt< 1500, correct == "TRUE", block_number == 1) %>% 
-  filter(relatedness %in% c("related", "unrelated") %>%
-  filter(!ID %in% low_acc_IDs) %>%
-  filter(condition %in% c("1", "2")
+  filter(!is.na(rt), rt> 200, rt< 1500, correct == "true", block_number == 1) %>% 
+  filter(relatedness %in% c("related", "unrelated")) %>%
+  filter(!ID %in% low_acc_IDs)
+
 ```
 
 ```{r}
@@ -98,7 +111,8 @@ rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
 ```{r}
 car::Anova(rt_model)
 nobs(rt_model)
-check_model = rt_model
+# load packages
+check_model(rt_model)
 ```
 
 
