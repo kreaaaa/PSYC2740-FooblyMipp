@@ -1,6 +1,8 @@
 ---
 title: "FM-PreRegistration"
 output: html_notebook
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r}
@@ -27,7 +29,31 @@ final_data = rbind(sona_data, prolific_data) %>%
                                 "non-rhyming" = "1",
                                 "rhyming" = "2"))
 ```
+#number of rows and columns 
+```{r}
+nrow(final_data)
+ncol(final_data)
+```
+number of columns= 
+number of rows=
 
+#unique participants and trials
+```{r}
+final_data%>% group_by(subject)%>% count()
+```
+There are x unique subjects.
+Each subject completed x trials.
+# levels of variables
+```{r}
+final_data=read_csv ("formative_assignment_2_data.csv") %>%
+mutate(prime_condition = as.factor(prime_condition),
+  state= as.factor(state))
+  
+levels(descriptive_data$prime_condition)
+levels(descriptive_data$state)
+```
+prime_condition has  levels
+state has  levels
 #just to see generally what data looks like. not useful
 ```{r}
 ggplot(data = final_data) +
