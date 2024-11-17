@@ -18,17 +18,10 @@ sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
 
 prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
   select(-PROLIFIC_PID) %>% mutate(data_source = "prolific")
-
-# bind
-
-final_data = rbind(sona_data, prolific_data) %>%
- mutate(rt = as.numeric(rt),
-        relatedness = as.factor(relatedness),
-        condition = as.factor(condition))%>%
-  mutate(condition = fct_recode(condition, 
-                                "non-rhyming" = "1",
-                                "rhyming" = "2"))
 ```
+
+
+```{r}
 #number of rows and columns 
 ```{r}
 nrow(final_data)
