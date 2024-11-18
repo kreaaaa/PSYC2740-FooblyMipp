@@ -66,7 +66,7 @@ final_data %>%
   count()
 
 ```
-#There are 136 unique subjects.
+#There are 136 unique subjects but only have complete data for 126 participants.
 #Subjects completed different numbers of trials because _________
 # 60 sentence trials were completed all participants except 232084287, 467885230, 727137633, 869755378.		
 # 9 attention check trials were completed by all participants except 232084287, 467885230, 727137633, 869755378, 
@@ -84,17 +84,23 @@ levels(final_data$relatedness)
 
 #Our dependent variable columns are reaction time and correct for target trials. For our attention check and association task, we are looking at the response column. 
 
-#for Katie. Just wanted to see generally what data looks like. not useful
-```{r}
-ggplot(data = final_data) +
-  geom_histogram(mapping = aes (x = as.numeric(rt)))
-
-range(as.numeric(prereg$rt))
-
-```
 #BASIC DESCRIPTIVES
 
 
+#still trying to get the histogram to work
+```{r}
+basic_data = final_data %>% filter(typeoftrial == "target") %>% 
+  select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
+ggplot() +
+  geom_histogram(mapping = aes (x = as.numeric(rt)))
+
+```
+
+#INFERENTIAL STATISTICS
+
+#Our primary research question is ...
+
+#In our pre-registration, we said that we would exclude trials that ...
 ```{r}
 #editing all attention trials to adjust for typos
 
