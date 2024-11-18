@@ -4,12 +4,12 @@ output: html_notebook
 editor_options: 
   chunk_output_type: inline
 ---
-
+# load in tidyverse
 ```{r}
 library(tidyverse)
 ```
 
-
+# read in data from sona and prolific
 ```{r}
 sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
   select(-sona_id) %>% mutate(data_source = "sona")
@@ -18,35 +18,45 @@ sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
 
 prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
   select(-PROLIFIC_PID) %>% mutate(data_source = "prolific")
+
+```
+# bind
+```{r}
+prolific_data <- prolific_data %>% select(names(sona_data))
+final_data = rbind(sona_data, prolific_data) %>%
+ mutate(rt = as.numeric(rt),
+        relatedness = as.factor(relatedness),
+        condition = as.factor(condition))%>%
+  mutate(condition = fct_recode(condition, 
+                                "non-rhyming" = "1",
+                               "rhyming" = "2"))
 ```
 
-
-```{r}
 #number of rows and columns 
 ```{r}
 nrow(final_data)
 ncol(final_data)
 ```
-number of columns= 
-number of rows=
+number of columns= 49
+number of rows= 44306
 
 #unique participants and trials
 ```{r}
-final_data%>% group_by(subject)%>% count()
+final_data%>% group_by(ID)%>% count()
 ```
-There are x unique subjects.
+There are 136 unique subjects.
 Each subject completed x trials.
 # levels of variables
 ```{r}
-final_data=read_csv ("formative_assignment_2_data.csv") %>%
-mutate(prime_condition = as.factor(prime_condition),
-  state= as.factor(state))
+final_data = rbind(sona_data, prolific_data) %>%
+mutate(condition = as.factor(condition),
+  relatedness= as.factor(relatedness))
   
-levels(descriptive_data$prime_condition)
-levels(descriptive_data$state)
+levels(final_data$condition)
+levels(final_data$relatedness)
 ```
-prime_condition has  levels
-state has  levels
+condition has 2 levels
+relatedness has 2 levels
 #just to see generally what data looks like. not useful
 ```{r}
 ggplot(data = final_data) +
