@@ -122,7 +122,7 @@ priming_data = prereg %>% filter(typeoftrial == "target") %>%
 ```
 
 ```{r}
-priming_data %>%
+final_data %>%
   group_by(condition, relatedness) %>%
   summarise(mean_rt = mean(rt)) %>%
   ggplot() +
@@ -136,7 +136,7 @@ priming_data %>%
 ```{r}
 library(lmerTest)
 
-rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
+rt_model = lmer(data = final_data, rt~ relatedness*condition + (1|ID))
 ```
 
 ```{r}
