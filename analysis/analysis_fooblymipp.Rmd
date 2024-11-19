@@ -50,6 +50,17 @@ ncol(final_data)
 ```
 #Number of columns = 49
 #Number of rows = 44306
+```{r}
+final_data%>%
+  group_by(condition, ID)%>%
+  count()%>%
+  group_by(condition)%>%
+count()
+```
+```{r}
+```
+
+
 
 
 ```{r}
@@ -58,6 +69,7 @@ ncol(final_data)
 final_data%>% 
 group_by(ID)%>% 
 count()
+
 
 final_data %>% 
   filter(typeoftrial == "sentence") %>%
@@ -163,9 +175,9 @@ geom_histogram(mapping = aes (x = as.numeric(rt)))
 
 #INFERENTIAL STATISTICS
 
-#Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and  rhymes with the familiar noun.
+Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and  rhymes with the familiar noun.
 
-#In our pre-registration, we said that we would exclude trials that accuracy on attention check questions less than 0.75 will result in data being excluded from previous analyses. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
+In our pre-registration, we said that we would exclude trials that accuracy on attention check questions less than 0.75 will result in data being excluded from previous analyses. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
 
 ```{r}
 
@@ -201,12 +213,24 @@ low_acc_IDs = subject_attention_accuracy  %>%
 
 priming_data = final_data %>% filter(typeoftrial == "target") %>% 
   select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
-  filter(!is.na(rt), rt> 200, rt< 1500, correct == "true", block_number == 1) %>% 
-  filter(relatedness %in% c("related", "unrelated")) %>%
-  filter(!ID %in% low_acc_IDs)
+  filter(!is.na(rt) , rt> 200 , rt< 1500)#, correct == "true" )#, block_number == 1) %>% 
+  #filter(relatedness %in% c("related", "unrelated")) %>%
+  #filter(!ID %in% low_acc_IDs)
+
+priming_accuracy = priming_data %>% 
+  mutate(acc = ifelse(correct == "true", 1,0)) %>%
+  group_by(ID) %>%
+  summarize(acc = mean(acc))
 
 ```
 
+```{r}
+priming_data%>%
+  group_by(condition, ID)%>%
+  count()%>%
+  group_by(condition)%>%
+count()
+```
 ```{r}
 priming_data %>%
   group_by(condition, relatedness) %>%
