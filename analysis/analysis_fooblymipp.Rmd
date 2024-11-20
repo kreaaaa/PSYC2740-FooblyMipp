@@ -40,6 +40,7 @@ final_data = rbind(sona_data, prolific_data) %>%
   mutate(relatedness = fct_recode(relatedness,
                                   "related" = "unrelated",
                                   "unrelated" = "related"))
+mutate(correct = tolower(correct))
 ```
 #INSPECT DATA
  
@@ -58,6 +59,11 @@ final_data%>%
 count()
 ```
 ```{r}
+final_data%>%
+filter(data_source == "prolific")%>%
+  pull(correct)%>%
+  unique()
+  
 ```
 
 
@@ -252,12 +258,8 @@ priming_data %>%
 
 
 #Separate terms for main effects and interactions
-```{r}
-priming_model = lm(data = priming_data, rt ~ condition + relatedness +condition:relatedness)
 
-car :: Anova(priming_model)
-```
-#An ANOVA was conducted. No main effect of Condition was reported (F(1, 399)= 0.095, p = 0.392.
+An ANOVA was conducted. No main effect of Condition was reported (F(1, 399)= 0.095, p = 0.392.
 #There is a main effect of Relatedness (F(1, 399)= 13.807, p < 0.001).
 #There is also a significant interaction between gender and education (F(1, 399)= 6.619, p = 0.010)
 
@@ -303,6 +305,13 @@ check_model(rt_model)
 #A Chi-squared test of independence was conducted to examine the relationship between Condition and Relatedness. The results showed no significant association between the variables, χ² = 5.76, df = 3, p = 0.12.
 
 
+```{r}
+unique_values <- unique(final_data$correct)
+print(unique_values)
+```
+```{r}
+
+```
 
 
 
