@@ -2,11 +2,11 @@
 title: "FM-PreRegistration"
 output: html_notebook
 ---
-# load in tidyverse
+# Load in tidyverse
 ```{r}
 library(tidyverse)
 ```
-
+# Import data
 ```{r}
 sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
   select(-sona_id) %>% mutate(data_source = "sona")
@@ -23,7 +23,7 @@ ncol(prolific_data)
 prolific_data <- prolific_data %>% select(names(sona_data))
 ```
 
-bind
+bind data from both sona and prolific 
 ```{r}
 ##prolific_data <- prolific_data %>% select(names(sona_data))
 final_data = rbind(sona_data, prolific_data) %>%
@@ -35,10 +35,10 @@ final_data = rbind(sona_data, prolific_data) %>%
                                "rhyming" = "2")) %>%
   mutate(relatedness = fct_recode(relatedness,
                                   "related" = "unrelated",
-                                  "unrelated" = "related"))
- # mutate(correct = tolower(correct))
+                                  "unrelated" = "related")) %>%
+ mutate(correct = tolower(correct))
 ```
-#INSPECT DATA
+# Inspect data 
  
 ```{r}
 #number of rows and columns 
@@ -47,24 +47,9 @@ ncol(final_data)
 ```
 Number of columns = 49
 Number of rows = 44306
-```{r}
-final_data%>%
-  group_by(condition, ID)%>%
-  count()%>%
-  group_by(condition)%>%
-count()
-```
-```{r}
-final_data%>%
-filter(data_source == "prolific")%>%
-  pull(correct)%>%
-  unique()
-  
-```
 
 
-
-
+## Unique subjects and trials 
 ```{r}
 #unique participants and trials
 
@@ -89,23 +74,23 @@ final_data %>%
   count()
 
 ```
-#There are 136 unique subjects but only have complete data for 126 participants.
-#Subjects completed different numbers of trials because _________
-# 60 sentence trials were completed all participants except 232084287, 467885230, 727137633, 869755378.		
-# 9 attention check trials were completed by all participants except 232084287, 467885230, 727137633, 869755378, 
-# All participants completeted 55 trials; however, these 4 subject IDs did not appear in the data because they had no target data.
+There are 136 unique subjects but only have complete data for 126 participants.
+Subjects completed different numbers of trials because of either slow responses to target trials or ____
+60 sentence trials were completed all participants except four:  232084287, 467885230, 727137633, 869755378.		
+9 attention check trials were completed by all participants except the same four: 232084287, 467885230, 727137633, 869755378, 
+All participants completeted 55 trials; however, these 4 subject IDs did not appear in the data because they had no target data.
 
 
-# Levels of variables
+##  Columns and Levels of variables
 ```{r}
 levels(final_data$condition)
 levels(final_data$relatedness)
 ```
-#Our Condition and Relatedness columns indicate our independent variables.
-#Condition has 2 levels: non-rhyming and rhyming
-#Relatedness has 2 levels that we are evaluating (related and unrelated). In the data it has "novel" and "" too. No target trial has "". 
+Our Condition and Relatedness columns indicate our independent variables.
+Condition has 2 levels: non-rhyming and rhyming
+Relatedness has 2 levels that we are evaluating (related and unrelated). In the data it has "novel" and "" too. No target trial has "". 
 
-#Our primary dependent variable columns are reaction time and correct for target trials. For our attention check and association task, we are looking at the response column. 
+Our primary dependent variable columns are reaction time and correct for target trials. For our attention check and association task, we are looking at the response column. 
 
 #BASIC DESCRIPTIVES
 ```{r}
@@ -134,13 +119,13 @@ education_distribution= demographics%>%
   filter(education != "blank")%>%
   count(education)
 ```
-#Our mean age is 33.63492 years old with a standard deviation of 14.70325. (M = 33.63, SD = 14.70325)
-#Gender distribution: Women (n = 72), Men (n = 52), Nonbinary (n = 2)
-#Race distribution: Asian (n = 6), Black/African American (n = 24), Other (n = 6), White/Caucasian (n = 82), Multiracial (n = 8)
-#Education distribution: 5 years (n = 1), 8 years (n = 1), 10 years (n = 3), 11 years (n = 2), 12 years (n = 35), 13 years, (n = 10), 14 years (n = 15), 15 years (n = 13), 16 years (n = 19), 17 years (n = 10), 18 years (n = 5), 19 years (n = 4), 20 years (n = 5), 21 years (n = 1), 24 years (n = 1), 27 years (n = 1). 
+Mean age is 33.63 years old with a standard deviation of 14.70. (M = 33.63, SD = 14.70)
+Gender distribution: Women (n = 72), Men (n = 52), Nonbinary (n = 2)
+Race distribution: Asian (n = 6), Black/African American (n = 24), Other (n = 6), White/Caucasian (n = 82), Multiracial (n = 8)
+Education distribution: 5 years (n = 1), 8 years (n = 1), 10 years (n = 3), 11 years (n = 2), 12 years (n = 35), 13 years, (n = 10), 14 years (n = 15), 15 years (n = 13), 16 years (n = 19), 17 years (n = 10), 18 years (n = 5), 19 years (n = 4), 20 years (n = 5), 21 years (n = 1), 24 years (n = 1), 27 years (n = 1). 
 
 
-#What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
+## Average accuracy in your experiment and the standard deviation of the accuracy?
 ```{r}
 trial_data = final_data %>%
   filter(typeoftrial == "target") %>%
@@ -156,9 +141,9 @@ trial_accuracy = trial_data %>%
     sd_accuracy = sd(correct, na.rm = TRUE))
 
 ```
-# Average accuracy for target trials (not practice trials) with no exclusions (M = 0.8858333, SD = 0.3181462)
+Average accuracy for target trials (not practice trials) with no exclusions (M = 0.8858333, SD = 0.3181462)
 
-#still trying to get the histogram to work
+## Histogram of rt 
 ```{r}
 basic_data = final_data %>% 
   filter(typeoftrial == "target") %>% 
@@ -172,7 +157,7 @@ ggplot(basic_data, aes(x = rt)) +
 
 geom_histogram(mapping = aes (x = as.numeric(rt)))             
 ```
-#Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1500 ms.
+Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1500 ms.
 
 
 #INFERENTIAL STATISTICS
@@ -211,13 +196,13 @@ low_acc_IDs = subject_attention_accuracy  %>%
 
 
 ```{r}
-#target data taking into account the exclusions
+#target data after applying exclusions
 
 priming_data = final_data %>% filter(typeoftrial == "target") %>% 
   select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
-  filter(!is.na(rt) , rt> 200 , rt< 1500)#, correct == "true" )#, block_number == 1) %>% 
-  #filter(relatedness %in% c("related", "unrelated")) %>%
-  #filter(!ID %in% low_acc_IDs)
+  filter(!is.na(rt) , rt> 200 , rt< 1500, correct == "true" , block_number == 1) %>% 
+  filter(relatedness %in% c("related", "unrelated")) %>%
+  filter(!ID %in% low_acc_IDs)
 
 priming_accuracy = priming_data %>% 
   mutate(acc = ifelse(correct == "true", 1,0)) %>%
@@ -233,6 +218,11 @@ priming_data%>%
   group_by(condition)%>%
 count()
 ```
+- how many participants were recruited
+- how many did not finish the game
+- how many were excluded based on ALL pre-registered criteria
+- how many participants' data are analyzed for priming: 87 participants' data are analyzed in our priming model 
+
 ```{r}
 priming_data %>%
   group_by(condition, relatedness) %>%
@@ -266,19 +256,36 @@ rt_model = lmer(data = final_data, rt~ relatedness*condition + (1|ID))
 
 ```{r}
 car::Anova(rt_model)
-nobs(rt_model)
+nobs(rt_model) 
 check_model(rt_model)
 ```
-For relatedness χ² = 0.843.86, df = 3, p > 0.001
-For condition χ² = 3.21, df = 1, p = 0.073
+For relatedness χ² = 0.844, df = 3, p < 0.001, INCORRECT recording of p-value, state actual p value -- think i fixed it 
+based on slides, it should be  χ²(3, N= nobs(19651)) = 0.844, p< .001 
+For condition χ² = 3.21, df = 1, p = 0.073 -- need df and N 
 We have no major violations of assumptions with this model.
 A Chi-squared test of independence was conducted to examine the relationship between Condition and Relatedness. The results showed no significant association between the variables, χ² = 5.76, df = 3, p = 0.12.
 
 # checking to see how many unique values w prof kumar 
 ```{r}
-#unique_values <- unique(final_data$correct)
-#print(unique_values)
+unique_values <- unique(final_data$correct)
+print(unique_values)
 ```
+
+```{r}
+final_data%>%
+  group_by(condition, ID)%>%
+  count()%>%
+  group_by(condition)%>%
+count()
+```
+```{r}
+final_data%>%
+filter(data_source == "prolific")%>%
+  pull(correct)%>%
+  unique()
+
+```
+
 
 
 
