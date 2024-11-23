@@ -150,7 +150,7 @@ basic_data = final_data %>%
   select(ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key)
 
 ggplot(basic_data, aes(x = rt)) + 
-  geom_histogram(binwidth = 1, color = "firebrick2") +
+  geom_histogram(binwidth = 2, color = "firebrick2") +
   theme_minimal() +
   labs(title = "Histogram of Reaction Times", x = "Reaction Time (ms)", y = "Count")
     
@@ -158,11 +158,6 @@ ggplot(basic_data, aes(x = rt)) +
 geom_histogram(mapping = aes (x = as.numeric(rt)))             
 ```
 Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1500 ms.
-
-
-#INFERENTIAL STATISTICS
-
-Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and  rhymes with the familiar noun.
 
 ## Exclusions  
 We excluded data from participants whose accuracy on attention check questions was less than 0.75. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
@@ -217,7 +212,7 @@ priming_data%>%
   group_by(condition, ID)%>%
   count()%>%
   group_by(condition)%>%
-count()
+  count() %>%
 ```
 - how many participants were recruited= 225
 - how many did not finish the game= 28
@@ -225,22 +220,36 @@ count()
 - how many participants' data are analyzed for priming: 137  participants' data are analyzed in our priming model (70 non-rhyming and 67 rhyming)
 
 ## bar plot
+
+
+### bar data 
+
+
 ```{r}
+# Summarise the data and directly use it in the plotting step
 priming_data %>%
   group_by(condition, relatedness) %>%
-  summarise(mean_rt = mean(rt)) %>%
-  ggplot() +
-  geom_col(mapping= aes(x= condition, y= mean_rt, 
-                        group= relatedness, fill= relatedness),
-           position = "dodge") +
+  summarise(
+    mean_rt = mean(rt, na.rm = TRUE),
+    sd_rt = sd(rt, na.rm = TRUE)
+  ) %>%
+  ggplot(mapping = aes(x = condition, y = mean_rt, group = relatedness, fill = relatedness)) +
+  geom_col(position = "dodge") +
+  geom_errorbar(
+    aes(ymin = mean_rt - sd_rt, ymax = mean_rt + sd_rt),
+    width = 0.25,
+    position = position_dodge(width = 0.9)
+  ) +
   theme_minimal() +
-  scale_fill_manual(values = c("firebrick2", "lightblue"))+
-    labs(title = "Mean Reaction Time by Condition and Relatedness", 
-       x = "Condition", 
-       y = "Mean Reaction Time") +
+  scale_fill_manual(values = c("firebrick2", "lightblue")) +
+  labs(
+    title = "Mean Reaction Time by Condition and Relatedness",
+    x = "Condition",
+    y = "Mean Reaction Time"
+  ) +
   guides(fill = guide_legend(title = "Relatedness"))
-
 ```
+
 By only analyzing our plot, we notice that the non-rhyming x unrelated condition has a faster mean reaction time compared to the rhyming x unrelated condition. In the related condition, the rhyming condition has a faster mean reaction time than the non-rhyming condition.
 
 #Inferential Statistics
@@ -251,22 +260,21 @@ Inspecting the model
 #install.packages("lmerTest")
 library(lmerTest)
 library(performance)
-library(pathwork)
 
 rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
 ```
 
-
+```{r}
 car::Anova(rt_model)
 nobs(rt_model) 
 print(nobs(rt_model))
 check_model(rt_model)
+```
 
-For relatedness χ² = 0.844, df = 3, p < 0.001, INCORRECT recording of p-value, state actual p value -- think i fixed it 
-based on slides, it should be  χ²(3, N= nobs(19651)) = 0.844, p< .001 
-For condition χ² = 3.21, df = 1, p = 0.073 -- need df and N 
-We have no major violations of assumptions with this model.
-A Chi-squared test of independence was conducted to examine the relationship between Condition and Relatedness. The results showed no significant association between the variables, χ² = 5.76, df = 3, p = 0.12.
+Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and  rhymes with the familiar noun.
+
+The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatedness and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
+
 
 
 
