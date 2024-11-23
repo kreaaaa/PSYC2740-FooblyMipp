@@ -222,7 +222,7 @@ count()
 - how many participants were recruited= 225
 - how many did not finish the game= 28
 - how many were excluded based on ALL pre-registered criteria= 60
-- how many participants' data are analyzed for priming: 137  participants' data are analyzed in our priming model. 
+- how many participants' data are analyzed for priming: 137  participants' data are analyzed in our priming model (70 non-rhyming and 67 rhyming)
 
 ## bar plot
 ```{r}
@@ -251,17 +251,17 @@ Inspecting the model
 #install.packages("lmerTest")
 library(lmerTest)
 library(performance)
+library(pathwork)
 
 rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
 ```
 
 
-```{r}
 car::Anova(rt_model)
 nobs(rt_model) 
 print(nobs(rt_model))
 check_model(rt_model)
-```
+
 For relatedness χ² = 0.844, df = 3, p < 0.001, INCORRECT recording of p-value, state actual p value -- think i fixed it 
 based on slides, it should be  χ²(3, N= nobs(19651)) = 0.844, p< .001 
 For condition χ² = 3.21, df = 1, p = 0.073 -- need df and N 
