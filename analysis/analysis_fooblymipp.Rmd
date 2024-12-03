@@ -267,7 +267,7 @@ print(nobs(rt_model))
 check_model(rt_model)
 ```
 
-Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and  rhymes with the familiar noun.
+Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
 The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatedness and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
 
