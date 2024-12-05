@@ -258,6 +258,7 @@ mean_scores %>%
     width = 0.25,
     position = position_dodge(width = .85)) +
   theme_minimal() +
+  ylim(0, 900)+
   scale_fill_manual(values = c("firebrick2", "lightblue")) +
   labs(
     title = "Mean Reaction Time by Condition and Relatedness",
@@ -288,6 +289,14 @@ nobs(rt_model)
 print(nobs(rt_model))
 check_model(rt_model)
 ```
+
+```{r}
+emmeans :: emmeans(rt_model, 
+                   pairwise ~ relatedness | condition, 
+                   adjust = "tukey")
+```
+
+
 
 Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
