@@ -17,6 +17,7 @@ sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
 prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
   select(-PROLIFIC_PID) %>% mutate(data_source = "prolific")
 
+
 ```
 Making sure sona data and prolific data have the same amount of columns
 ```{r}
@@ -123,6 +124,12 @@ race_distribution= demographics%>%
 
 education_distribution= demographics%>%
   filter(education != "blank")%>%
+<<<<<<< HEAD
+  count(education)
+
+mean_education= demographics%>%
+=======
+>>>>>>> 5122501da45e21416d42dc2245fdc69d4ccabb5b
   summarise(mean_education= mean(education, na.rm = TRUE),
             sd_education=sd(education, na.rm = TRUE))
 ```
@@ -165,7 +172,7 @@ ggplot(basic_data, aes(x = rt)) +
 
 geom_histogram(mapping = aes (x = as.numeric(rt)))             
 ```
-Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1500 ms.
+Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1
 
 ## Exclusions  
 We excluded data from participants whose accuracy on attention check questions was less than 0.75. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
@@ -300,7 +307,7 @@ emmeans :: emmeans(rt_model,
 
 Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
-The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatedness and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
+The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
 
 
 
