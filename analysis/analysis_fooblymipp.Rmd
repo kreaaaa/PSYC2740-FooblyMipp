@@ -202,12 +202,6 @@ subject_attention_accuracy = attention_trials  %>%
   summarise(mean_accuracy = mean(revised_correct))
 print(subject_attention_accuracy)
 
-# average reaction time for each subject in each condition in experiment
-subject_reaction_time = priming_data %>%
-  group_by(ID, condition) %>%
-  summarise(mean_rt = mean(rt, na.rm = TRUE),
-            sd_rt = sd(rt, na.rm = TRUE))  
-print(subject_reaction_time)
 # find IDs with less than 75% accuracy
 low_acc_IDs = subject_attention_accuracy  %>% 
   filter(mean_accuracy < 0.75)  %>% 
@@ -242,6 +236,11 @@ priming_data%>%
   count()%>%
   group_by(condition)%>%
   count() 
+# average reaction time for each subject in each condition in experiment
+subject_reaction_time = priming_data %>%
+  group_by(ID, condition) %>%
+  summarise(mean_rt = mean(rt, na.rm = TRUE),
+            sd_rt = sd(rt, na.rm = TRUE))  
 ```
 - how many participants were recruited = 235
 - how many did not finish the game = 25
