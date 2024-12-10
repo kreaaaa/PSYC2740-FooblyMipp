@@ -49,8 +49,8 @@ nrow(final_data)
 ncol(final_data)
 
 ```
-Number of columns = 49
-Number of rows = 44306
+Number of columns = 51
+Number of rows = 74328
 
 
 ## Unique subjects and trials 
@@ -61,8 +61,8 @@ final_data%>%
 group_by(ID)%>% 
 count()
 ```
-There are 197 unique subjects but only have complete data for  participants.
-Subjects completed different numbers of 'trials' because of either slow responses to target trials or additional questions in demographics.
+There are 235 unique subjects. 
+Subjects completed different numbers of 'trials' because of either slow responses to target trials ,additional questions in demographics, or simply a failure to complete the experiment.
 
 ```{r}
 final_data %>% 
@@ -70,7 +70,7 @@ final_data %>%
   group_by(ID) %>% 
   count()
 ```
-60 sentence trials were completed all participants except four:  232084287, 467885230, 727137633, 869755378.
+## need to find out how many did not do sentence 60 sentence trials were completed all participants except four:  232084287, 467885230, 727137633, 869755378.
 
 ```{r}
 final_data %>% 
@@ -86,7 +86,7 @@ final_data %>%
   group_by(ID) %>% 
   count()
 ```
-All participants completeted 55 trials; however, these 4 subject IDs did not appear in the data because they had no target data.
+All (210)participants completeted 55 target trials; however, these 4 subject IDs did not appear in the data because they had no target data.
 
 ##  Columns and Levels of variables
 ```{r}
@@ -113,31 +113,33 @@ mutate(across(c("age","gender","education","race","hispanic", "dominant_hand", "
 subject_age= demographics%>%
   summarise(mean_age= mean(age, na.rm = TRUE),
             sd_age=sd(age, na.rm = TRUE))
+print(subject_age)
 
 gender_distribution= demographics%>%
   filter(gender != "blank") %>%
   count(gender)
 
+print(gender_distribution)
+
 race_distribution= demographics%>%
   filter(race != "blank")%>%
   count(race)
 
+print(race_distribution)
 education_distribution= demographics%>%
   filter(education != "blank")%>%
-<<<<<<< HEAD
   count(education)
 
 mean_education= demographics%>%
-=======
->>>>>>> 5122501da45e21416d42dc2245fdc69d4ccabb5b
   summarise(mean_education= mean(education, na.rm = TRUE),
             sd_education=sd(education, na.rm = TRUE))
+print(mean_education)
 ```
 
-Mean age is 33.63 years old with a standard deviation of 14.70. (M = 33.63, SD = 14.70)
-Gender distribution: Women (n = 72), Men (n = 52), Nonbinary (n = 2)
+Mean age is 34.04 years old with a standard deviation of 15.35 (M = 33.63, SD = 14.70)
+Gender distribution: Women (n = 113), Men (n = 95), Nonbinary (n = 2)
 Race distribution: Asian (n = 6), Black/African American (n = 24), Other (n = 6), White/Caucasian (n = 82), Multiracial (n = 8)
-The mean education years is 14.65 with a standard deviation of 2.80 (M = 14.65, SD = 2.80). 
+The mean education years is 14.52 with a standard deviation of 2.76 (M = 14.65, SD = 2.80). 
 
 
 ## Average accuracy in your experiment and the standard deviation of the accuracy?
@@ -241,9 +243,16 @@ priming_data%>%
   group_by(condition)%>%
   count() 
 ```
-- how many participants were recruited = 225
-- how many did not finish the game = 28
-- how many were excluded based on ALL pre-registered criteria = 60
+- how many participants were recruited = 235
+- how many did not finish the game = 25
+- how many were excluded based on ALL pre-registered criteria = 65
+```{r}
+final_data%>%
+  group_by(condition, ID)%>%
+  count()%>%
+  group_by(condition)%>%
+  count() 
+```
 
 ## Bar plot
 ```{r}
@@ -288,6 +297,7 @@ library(lmerTest)
 library(performance)
 
 rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
+
 ```
 
 ```{r}
@@ -307,7 +317,7 @@ emmeans :: emmeans(rt_model,
 
 Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
-The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
+The model revealed a significant main effect of relatedness (χ² (1, N = 4001)= 41.51, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 4001) = 2.49, p = 0.11),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 4001) = 15.76, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
 
 
 
