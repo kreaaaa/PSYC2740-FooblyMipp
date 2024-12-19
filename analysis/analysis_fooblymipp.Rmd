@@ -4,10 +4,10 @@ output:
   html_document:
     df_print: paged
 ---
-# LOAD IN TIDYVERSE
 ```{r}
 library(tidyverse)
 ```
+
 # IMPORT DATA
 ```{r}
 sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
@@ -19,14 +19,15 @@ prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
 
 
 ```
-Making sure sona data and prolific data have the same amount of columns
+
+Making sure sona data and prolific data have the same amount of columns for binding. 
 ```{r}
 ncol(sona_data)
 ncol(prolific_data)
 prolific_data <- prolific_data %>% select(names(sona_data))
 ```
 
-bind data from both sona and prolific 
+Bind data from both sona and prolific 
 ```{r}
 ##prolific_data <- prolific_data %>% select(names(sona_data))
 final_data = rbind(sona_data, prolific_data) %>%
@@ -41,27 +42,16 @@ final_data = rbind(sona_data, prolific_data) %>%
                                   "unrelated" = "related")) %>%
  mutate(correct = tolower(correct))
 ```
-# INSPECT DATA
- 
+
+## Participant Exclusions based on incomplete experiments.
+
 ```{r}
-#number of rows and columns 
-nrow(final_data)
-ncol(final_data)
-
-```
-Number of columns = 49
-Number of rows = 44306
-
-
-## Unique subjects and trials 
-```{r}
-#unique participants and trials
-
 final_data%>% 
 group_by(ID)%>% 
 count()
 ```
-There are 197 unique subjects but only have complete data for  participants.
+
+There are 217 unique subjects.
 Subjects completed different numbers of 'trials' because of either slow responses to target trials or additional questions in demographics.
 
 ```{r}
@@ -69,16 +59,14 @@ final_data %>%
   filter(typeoftrial == "sentence") %>%
   group_by(ID) %>% 
   count()
-```
-60 sentence trials were completed all participants except four:  232084287, 467885230, 727137633, 869755378.
 
-```{r}
 final_data %>% 
   filter(typeoftrial == "attention") %>%
   group_by(ID) %>% 
   count()
+
 ```
-9 attention check trials were completed by all participants except the same four: 232084287, 467885230, 727137633, 869755378.
+212 participants completed the Training phase, given by 60 sentence trials and 9 attention check trials.
 
 ```{r}
 final_data %>% 
@@ -86,20 +74,24 @@ final_data %>%
   group_by(ID) %>% 
   count()
 ```
-All participants completeted 55 trials; however, these 4 subject IDs did not appear in the data because they had no target data.
+211 participants completeted 55 trials (the full amount of target trials). At this point, 27 participants have been excluded.
 
-##  Columns and Levels of variables
+## Verification of Recorded Data
+
 ```{r}
 levels(final_data$condition)
 levels(final_data$relatedness)
 ```
+
 Our Condition and Relatedness columns indicate our independent variables.
 Condition has 2 levels: non-rhyming and rhyming
-Relatedness has 2 levels that we are evaluating (related and unrelated). In the data it has "novel" and "" too. No target trial has "". 
+Relatedness has 2 levels that we are evaluating (related and unrelated). 
+In the data it has "novel" and "" too. No target trial has "". 
 
-Our primary dependent variable columns are reaction time and correct for target trials. For our attention check and association task, we are looking at the response column. 
+Our primary dependent variable columns are 'reaction time' and 'correct' for target trials. For our attention check and association task, we are looking at the response column. 
 
-# BASIC DESCRIPTIVES
+## Demographic Data: Basic Descriptives
+
 ```{r}
 demographics = final_data %>%
   filter(typeoftrial == "demographics") %>%
@@ -124,23 +116,34 @@ race_distribution= demographics%>%
 
 education_distribution= demographics%>%
   filter(education != "blank")%>%
-<<<<<<< HEAD
   count(education)
 
 mean_education= demographics%>%
-=======
->>>>>>> 5122501da45e21416d42dc2245fdc69d4ccabb5b
   summarise(mean_education= mean(education, na.rm = TRUE),
             sd_education=sd(education, na.rm = TRUE))
 ```
 
-Mean age is 33.63 years old with a standard deviation of 14.70. (M = 33.63, SD = 14.70)
-Gender distribution: Women (n = 72), Men (n = 52), Nonbinary (n = 2)
-Race distribution: Asian (n = 6), Black/African American (n = 24), Other (n = 6), White/Caucasian (n = 82), Multiracial (n = 8)
-The mean education years is 14.65 with a standard deviation of 2.80 (M = 14.65, SD = 2.80). 
+For demographics ( N = 211 )
+Mean age (M = 33.91, SD = 15.41)
+Gender distribution: 
+  Women (N = 116) - 55.00% 
+  Men (N = 93) - 44.08 %
+  Nonbinary (N = 2) - 1.00 %
+Race distribution: 
+  Asian (N = 11) - 5.21%
+  Black/African American (N = 36) - 17.06%
+  Other (N = 10)
+  White/Caucasian (N = 141) - 66.82%
+  Multiracial (N = 13) - 6.16%
+Mean education (M = 14.50, SD = 2.77). 
 
 
-## Average accuracy in your experiment and the standard deviation of the accuracy?
+## Average accuracy in your experiment and the standard deviation of the accuracy.
+This histogram has been excluded from the results; however, we decided that this supplementary information will be kept in the code. 
+
+Average accuracy for target trials (not practice trials) before exclusions based on pre-registered threshold
+(M = 0.87, SD = 0.34)
+
 ```{r}
 trial_data = final_data %>%
   filter(typeoftrial == "target") %>%
@@ -156,9 +159,7 @@ trial_accuracy = trial_data %>%
     sd_accuracy = sd(correct, na.rm = TRUE))
 
 ```
-Average accuracy for target trials (not practice trials) with no exclusions (M = 0.87, SD = 0.34)
 
-## Histogram of rt 
 ```{r}
 basic_data = final_data %>% 
   filter(typeoftrial == "target") %>% 
@@ -177,9 +178,11 @@ Our histogram has concentrated reaction times under 2 seconds. From our data bei
 ## Exclusions  
 We excluded data from participants whose accuracy on attention check questions was less than 0.75. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
 
-```{r}
+The data collected for the attention check questions was adjusted to account for typos of 1-2 letters.
 
+```{r}
 #editing all attention trials to adjust for typos
+
 attention_trials= final_data%>% 
   filter(typeoftrial == "attention") %>% 
   select(ID, response, novel1, novel2, correct) %>% 
