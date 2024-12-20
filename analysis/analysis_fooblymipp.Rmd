@@ -179,7 +179,7 @@ Our histogram has concentrated reaction times under 2 seconds. From our data bei
 We excluded data from participants whose accuracy on attention check questions was less than 0.75. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
 
 The data collected for the attention check questions was adjusted to account for typos of 1-2 letters.
-
+There were 65 participants excluded due to not reaching the mandatory threshold of 75% accuracy on attention checks.
 ```{r}
 #editing all attention trials to adjust for typos
 
@@ -203,12 +203,6 @@ subject_attention_accuracy = attention_trials  %>%
   summarise(mean_accuracy = mean(revised_correct))
 print(subject_attention_accuracy)
 
-# average reaction time for each subject in each condition in experiment
-subject_reaction_time = priming_data %>%
-  group_by(ID, condition) %>%
-  summarise(mean_rt = mean(rt, na.rm = TRUE),
-            sd_rt = sd(rt, na.rm = TRUE))  
-print(subject_reaction_time)
 # find IDs with less than 75% accuracy
 low_acc_IDs = subject_attention_accuracy  %>% 
   filter(mean_accuracy < 0.75)  %>% 
@@ -217,13 +211,18 @@ low_acc_IDs = subject_attention_accuracy  %>%
 
 ### Target data after applying exclusions
 ```{r}
-
 priming_data = final_data %>% 
   filter(typeoftrial == "target") %>% 
   select (ID, rt, condition, relatedness, prime, response, type, correct, block_number, target, correct_key) %>% 
   filter(!is.na(rt), rt> 200 , rt< 1500, correct == "true", block_number == 1) %>% 
   filter(relatedness %in% c("related", "unrelated")) %>%
   filter(!ID %in% low_acc_IDs)
+
+# average reaction time for each subject in each condition in experiment
+subject_reaction_time = priming_data %>%
+  group_by(ID, condition) %>%
+  summarise(mean_rt = mean(rt, na.rm = TRUE),
+            sd_rt = sd(rt, na.rm = TRUE))  
 
 priming_accuracy = priming_data %>% 
   mutate(acc = ifelse(correct == "true", 1,0)) %>%
@@ -244,13 +243,15 @@ priming_data%>%
   group_by(condition)%>%
   count() 
 ```
-- how many participants were recruited = 225
-- how many did not finish the game = 28
-- how many were excluded based on ALL pre-registered criteria = 60
-
-## Bar plot
+- how many participants were recruited: 238
+- how many did not finish the game: 27
+- how many were excluded based on ALL pre-registered criteria: 92
+- after exclusions, 
+    non-rhyming: 74
+    rhyming: 72
+  
+## Bar plot: Mean Reaction Time by Condition and Relatedness
 ```{r}
-# Summarise the data and directly use it in the plotting step
 mean_scores = priming_data %>%
   group_by(condition, relatedness) %>%
   summarise(mean_rt = mean(rt, na.rm = TRUE),
@@ -278,20 +279,22 @@ mean_scores %>%
   guides(fill = guide_legend(title = "Relatedness"))
 ```
 
-By only analyzing our plot, we notice that the non-rhyming x unrelated condition has a faster mean reaction time compared to the rhyming x unrelated condition. In the related condition, the rhyming condition has a faster mean reaction time than the non-rhyming condition.
+By only analyzing our plot, we notice that the Non-rhyming x Unrelated condition has a faster mean reaction time compared to the Rhyming x Unrelated condition. In the Related condition, the rhyming condition has a faster mean reaction time than the non-rhyming condition.
 Error bars denote 95% confidence interval.
 
-# INFERENTIAL STATISTICS
+## INFERENTIAL STATISTICS
 
-Inspecting the model
-## Priming model (rt_model)
+Priming model (rt_model)
 ```{r}
 #install.packages("lmerTest")
 library(lmerTest)
 library(performance)
 
 rt_model = lmer(data = priming_data, rt~ relatedness*condition + (1|ID))
+
+
 ```
+`
 
 ```{r}
 car::Anova(rt_model)
@@ -310,8 +313,9 @@ emmeans :: emmeans(rt_model,
 
 Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
-The model revealed a significant main effect of relatedness (χ² (1, N = 3796)= 37.16, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 3796) = 3.11, p = 0.078),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 3796) = 13.18, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
+The model revealed a significant main effect of relatedness (χ² (1, N = 4037)= 44.61, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 4037) = 2.38, p = 0.12),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 4037) = 17.31, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
 
+The pairwise comparison 
 
 
 
