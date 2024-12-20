@@ -15,8 +15,8 @@ sona_data = read.csv("../data/savic-rhyming-sona.csv") %>%
 
 
 prolific_data = read.csv ("../data/savic-rhyming-prolific.csv") %>%
-  select(-PROLIFIC_PID) %>% mutate(data_source = "prolific")
-
+  select(-PROLIFIC_PID) %>% 
+  mutate(data_source = "prolific")
 
 ```
 
@@ -24,12 +24,14 @@ Making sure sona data and prolific data have the same amount of columns for bind
 ```{r}
 ncol(sona_data)
 ncol(prolific_data)
-prolific_data <- prolific_data %>% select(names(sona_data))
+
 ```
 
-Bind data from both sona and prolific 
+Because there are uneven columns, we need to adjust the data begore we bind the data from Sona and prolific.
+
 ```{r}
-##prolific_data <- prolific_data %>% select(names(sona_data))
+prolific_data <- prolific_data %>% select(names(sona_data))
+
 final_data = rbind(sona_data, prolific_data) %>%
  mutate(rt = as.numeric(rt),
         relatedness = as.factor(relatedness),
@@ -42,54 +44,6 @@ final_data = rbind(sona_data, prolific_data) %>%
                                   "unrelated" = "related")) %>%
  mutate(correct = tolower(correct))
 ```
-
-## Participant Exclusions based on incomplete experiments.
-
-```{r}
-final_data%>% 
-group_by(ID)%>% 
-count()
-```
-
-There are 217 unique subjects.
-Subjects completed different numbers of 'trials' because of either slow responses to target trials or additional questions in demographics.
-
-```{r}
-final_data %>% 
-  filter(typeoftrial == "sentence") %>%
-  group_by(ID) %>% 
-  count()
-
-final_data %>% 
-  filter(typeoftrial == "attention") %>%
-  group_by(ID) %>% 
-  count()
-
-```
-212 participants completed the Training phase, given by 60 sentence trials and 9 attention check trials.
-
-```{r}
-final_data %>% 
-  filter(typeoftrial == "target") %>%
-  group_by(ID) %>% 
-  count()
-```
-211 participants completeted 55 trials (the full amount of target trials). At this point, 27 participants have been excluded.
-
-## Verification of Recorded Data
-
-```{r}
-levels(final_data$condition)
-levels(final_data$relatedness)
-```
-
-Our Condition and Relatedness columns indicate our independent variables.
-Condition has 2 levels: non-rhyming and rhyming
-Relatedness has 2 levels that we are evaluating (related and unrelated). 
-In the data it has "novel" and "" too. No target trial has "". 
-
-Our primary dependent variable columns are 'reaction time' and 'correct' for target trials. For our attention check and association task, we are looking at the response column. 
-
 ## Demographic Data: Basic Descriptives
 
 ```{r}
@@ -123,26 +77,78 @@ mean_education= demographics%>%
             sd_education=sd(education, na.rm = TRUE))
 ```
 
-For demographics ( N = 211 )
+For demographics ( N = 213 )
 Mean age (M = 33.91, SD = 15.41)
 Gender distribution: 
-  Women (N = 116) - 55.00% 
-  Men (N = 93) - 44.08 %
-  Nonbinary (N = 2) - 1.00 %
+  Women (N = 116) - 54.45% 
+  Men (N = 95) - 44.60%
+  Nonbinary (N = 2) - 0.94%
 Race distribution: 
-  Asian (N = 11) - 5.21%
-  Black/African American (N = 36) - 17.06%
-  Other (N = 10)
-  White/Caucasian (N = 141) - 66.82%
-  Multiracial (N = 13) - 6.16%
-Mean education (M = 14.50, SD = 2.77). 
+  Asian (N = 11) - 5.16%
+  Black/African American (N = 36) - 16.90%
+  Other (N = 11) - 5.16%
+  White/Caucasian (N = 142) - 66.67%
+  Multiracial (N = 13) - 6.10%
+Mean education (M = 14.49, SD = 2.76). 
+
+## Verification of Recorded Data
+
+```{r}
+levels(final_data$condition)
+levels(final_data$relatedness)
+```
+
+Our Condition and Relatedness columns indicate our independent variables.
+Condition has 2 levels: non-rhyming and rhyming
+Relatedness has 2 levels that we are evaluating (related and unrelated). 
+In the data it has "novel" and "" too. No target trial has "". 
+
+Our primary dependent variable columns are 'reaction time' and 'correct' for target trials. For our attention check and association task, we are looking at the response column. 
 
 
-## Average accuracy in your experiment and the standard deviation of the accuracy.
+## Participant Exclusions based on incomplete experiments.
+
+```{r}
+final_data%>% 
+group_by(ID)%>% 
+count()
+```
+
+There are 238 unique subjects.
+Subjects completed different numbers of 'trials' because of either slow responses to target trials or additional questions in demographics.
+
+```{r}
+final_data %>% 
+  filter(typeoftrial == "sentence") %>%
+  group_by(ID) %>% 
+  count()
+
+final_data %>% 
+  filter(typeoftrial == "attention") %>%
+  group_by(ID) %>% 
+  count()
+
+```
+226 participants started the Training phase.
+214 finished given by 60 sentence trials and 9 attention check trials. 
+12 participants that did not not complete the Training phase. 
+
+
+```{r}
+final_data %>% 
+  filter(typeoftrial == "target") %>%
+  group_by(ID) %>% 
+  count()
+```
+213 participants completeted 55 trials (the full amount of target trials). 
+1 partcipant left the trial between the Test phase and Training phase. 
+At this point, 25 participants have been excluded.
+
+# Average accuracy in experiment and the standard deviation of the accuracy.
 This histogram has been excluded from the results; however, we decided that this supplementary information will be kept in the code. 
 
 Average accuracy for target trials (not practice trials) before exclusions based on pre-registered threshold
-(M = 0.87, SD = 0.34)
+(M = 0.86, SD = 0.34)
 
 ```{r}
 trial_data = final_data %>%
@@ -175,11 +181,11 @@ geom_histogram(mapping = aes (x = as.numeric(rt)))
 ```
 Our histogram has concentrated reaction times under 2 seconds. From our data being displayed in this way, we can determine that we definitely will have outliers as some values are well over 1
 
-## Exclusions  
+## Other Pre-registeredExclusions  
 We excluded data from participants whose accuracy on attention check questions was less than 0.75. On the priming task, incorrect identification of the familiar noun or reaction times that are extremely short (less than 200 ms) or extremely long (greater than 1,500 ms) will result in removal of data. In addition, incomplete experiments will be removed from analyses. Finally, English fluency is necessary, so data will be removed if a participant’s first language is not English or they did not learn before the age of 4. 
 
 The data collected for the attention check questions was adjusted to account for typos of 1-2 letters.
-There were 65 participants excluded due to not reaching the mandatory threshold of 75% accuracy on attention checks.
+
 ```{r}
 #editing all attention trials to adjust for typos
 
@@ -243,12 +249,13 @@ priming_data%>%
   group_by(condition)%>%
   count() 
 ```
+Summary
 - how many participants were recruited: 238
-- how many did not finish the game: 27
+- how many did not finish the game: 25
 - how many were excluded based on ALL pre-registered criteria: 92
 - after exclusions, 
     non-rhyming: 74
-    rhyming: 72
+    rhyming: 73
   
 ## Bar plot: Mean Reaction Time by Condition and Relatedness
 ```{r}
@@ -313,9 +320,7 @@ emmeans :: emmeans(rt_model,
 
 Our primary research question is whether exposure to language containing rhyming words can help to foster semantic links between novel and familiar words. If rhyming facilitates semantic integration, participants should identify familiar nouns faster when the prime is related to and rhymes with the familiar noun.
 
-The model revealed a significant main effect of relatedness (χ² (1, N = 4037)= 44.61, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 4037) = 2.38, p = 0.12),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 4037) = 17.31, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition.
-
-The pairwise comparison 
+The model revealed a significant main effect of relatedness (χ² (1, N = 4062)= 44.83, p < 0.001), suggesting that relatedness significantly influenced reaction times. The effect of condition was not significant (χ² = (1, N = 4062) = 2.18, p = 0.14),suggesting a potential influence of condition. The significant interaction between relatednesss and condition (χ² = (1, N = 4062) = 17.24, p < 0.001) suggests that the effect of relatedness on reaction time is moderated by the condition. Pairwise comparisons showed a significant difference in the Rhyming condition ( p < 0.001) for mean reaction times but not in the Non-Rhyming condition ( p =  0.072)
 
 
 
